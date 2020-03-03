@@ -21,6 +21,7 @@ function ColumnView({ column, index, reveal }: ColumnViewProp) {
       {column.map((patch, row) => {
         return (
           <PatchView
+            key={`${index}, ${row}`}
             patch={patch}
             coordinates={{ x: index, y: row }}
             reveal={reveal}
@@ -56,11 +57,19 @@ export default function GameFieldView({
   reveal
 }: GameFieldViewProps) {
   const visibleField = getVisibleField(gameField)
+  console.dir(visibleField)
   // const visibleField = testField
   return (
     <View style={{ flex: 1, flexDirection: "row" }}>
       {visibleField.map((column, index) => {
-        return <ColumnView column={column} index={index} reveal={reveal} />
+        return (
+          <ColumnView
+            column={column}
+            index={index}
+            reveal={reveal}
+            key={`${index}`}
+          />
+        )
       })}
     </View>
   )

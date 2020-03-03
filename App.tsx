@@ -1,23 +1,37 @@
 import React, { useState } from "react"
-import { StyleSheet, Text, View } from "react-native"
-import { FieldState, FieldSize, emptyField } from "./src/model/Field"
+import { StyleSheet, View } from "react-native"
 import GameFieldView from "./src/components/GameFieldView"
+import {
+  emptyField,
+  FieldSize,
+  PatchCoordinate,
+  generateBombField
+} from "./src/model/Field"
+import { revealPatch } from "./src/model/Reveal"
 
 export default function App() {
   const size: FieldSize = { width: 10, height: 8 }
-  const [field, setField] = useState<FieldState>(
-    (() => {
-      return emptyField(size)
-    })()
-  )
+  const mineCount = 10
+  const [field, setField] = useState(emptyField(size))
+  const [firstReveal, setFirstReveal] = useState(true)
+
+  const reveal = (coordinates: PatchCoordinate) => {
+    if (firstReveal) {
+      setFirstReveal(false)
+      const initialField = revealPatch(
+        generateBombField(size, mineCount, coordinates),
+        coordinates
+      )
+      setField(initialField)
+    } else {
+      const newField = revealPatch(field, coordinates)
+      setField([...newField])
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <GameFieldView
-        gameField={field}
-        reveal={({ x, y }) => {
-          console.log([x, y])
-        }}
-      />
+      <GameFieldView gameField={field} reveal={reveal} />
     </View>
   )
 }
