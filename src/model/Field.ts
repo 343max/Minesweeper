@@ -27,11 +27,13 @@ export type VisibleField = VisiblePatch[][]
 
 export type BoolField = boolean[][]
 
-export interface FieldState {
-  bombs: BoolField
-  flags: BoolField
-  revealed: BoolField
+export interface Patch {
+  isBomb: boolean
+  isFlagged: boolean
+  isRevealed: boolean
 }
+
+export type FieldState = Patch[][]
 
 export function getAdjacentPatches(
   { width, height }: FieldSize,
@@ -39,8 +41,8 @@ export function getAdjacentPatches(
 ): PatchCoordinate[] {
   return [
     { x: x - 1, y: y - 1 },
-    { x: x + 0, y: y - 1 },
-    { x: x + 1, y: y - 1 },
+    { x: x - 1, y: y + 0 },
+    { x: x - 1, y: y + 1 },
     { x: x + 0, y: y - 1 },
     // self patch
     { x: x + 0, y: y + 1 },
@@ -52,17 +54,20 @@ export function getAdjacentPatches(
   })
 }
 
-export function getFieldSize(field: BoolField): FieldSize {
+export function getFieldSize(field: FieldState): FieldSize {
   return { width: field.length, height: field[0]?.length ?? 0 }
 }
 
 export function getAdjacentBombCount(
-  field: BoolField,
+  field: FieldState,
   center: PatchCoordinate
 ): number {
-  return getAdjacentPatches(getFieldSize(field), center).filter(({ x, y }) => {
-    return field[x][y]
-  }).length
+  return getAdjacentPatches(getFieldSize(field), center).reduce(
+    (count, { x, y }) => {
+      return count + (field[x][y].isBomb ? 1 : 0)
+    },
+    0
+  )
 }
 
 export function getVisiblePatchForBombCount(bombCount: number): VisiblePatch {
@@ -83,9 +88,7 @@ export function getVisiblePatch(
   field: FieldState,
   coordinate: PatchCoordinate
 ): VisiblePatch {
-  const isBomb = field.bombs[coordinate.x][coordinate.y]
-  const isFlagged = field.flags[coordinate.x][coordinate.y]
-  const isRevealed = field.revealed[coordinate.x][coordinate.y]
+  const { isBomb, isFlagged, isRevealed } = field[coordinate.x][coordinate.y]
 
   if (isFlagged) {
     return VisiblePatch.Flag
@@ -94,27 +97,41 @@ export function getVisiblePatch(
   } else if (isBomb) {
     return VisiblePatch.Bomb
   } else {
-    const adjacentBombCount = getAdjacentBombCount(field.bombs, coordinate)
+    const adjacentBombCount = getAdjacentBombCount(field, coordinate)
     return getVisiblePatchForBombCount(adjacentBombCount)
   }
 }
 
-function filledArray<T>(count: number, fill: T): T[] {
-  return Array(count).fill(fill, 0, count)
+function filledArray<T>(count: number, fill: (i: number) => T | T): T[] {
+  if (typeof fill === "function") {
+    return Array(count)
+      .fill(null, 0, count)
+      .map((_, i) => {
+        return fill(i)
+      })
+  } else {
+    return Array(count).fill(fill, 0, count)
+  }
 }
 
 export function getVisibleField(field: FieldState): VisibleField {
-  const { width, height } = getFieldSize(field.bombs)
-  return filledArray(width, null).map((_, x) => {
-    return filledArray(height, null).map((_, y) => {
+  const { width, height } = getFieldSize(field)
+  return filledArray(width, x => {
+    return filledArray(height, y => {
       return getVisiblePatch(field, { x, y })
     })
   })
 }
 
-export function emptyField({ width, height }: FieldSize): BoolField {
-  return filledArray(width, null).map(() => {
-    return filledArray(height, false)
+export function emptyField({ width, height }: FieldSize): FieldState {
+  return filledArray(width, () => {
+    return filledArray(height, () => {
+      return {
+        isBomb: false,
+        isFlagged: false,
+        isRevealed: false
+      }
+    })
   })
 }
 
@@ -122,25 +139,23 @@ export function generateBombField(
   { width, height }: FieldSize,
   bombCount: number,
   safePatch: PatchCoordinate
-): BoolField {
+): FieldState {
   function getRandomInt(max: number): number {
     return Math.floor(Math.random() * Math.floor(max))
   }
 
-  let field = filledArray(width, null).map(() => {
-    return filledArray(height, false)
-  })
+  let field = emptyField({ width, height })
 
   let currentCount = 0
   while (currentCount < bombCount) {
     const x = getRandomInt(width),
       y = getRandomInt(height)
 
-    if (field[x][y] == true || (safePatch.x == x && safePatch.y == y)) {
+    if (field[x][y].isBomb == true || (safePatch.x == x && safePatch.y == y)) {
       continue
     }
 
-    field[x][y] = true
+    field[x][y].isBomb = true
     currentCount += 1
   }
 
