@@ -7,17 +7,25 @@ import {
   VisibleField
 } from "../model/Field"
 import PatchView from "./PatchView"
+import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 
 interface ColumnViewProp {
   column: VisiblePatch[]
   index: number
+  reveal: CallbackWithCoordinates
 }
 
-function ColumnView({ column, index }: ColumnViewProp) {
+function ColumnView({ column, index, reveal }: ColumnViewProp) {
   return (
     <View style={{ flex: 1, flexDirection: "column" }}>
       {column.map((patch, row) => {
-        return <PatchView patch={patch} coordinates={{ x: index, y: row }} />
+        return (
+          <PatchView
+            patch={patch}
+            coordinates={{ x: index, y: row }}
+            reveal={reveal}
+          />
+        )
       })}
     </View>
   )
@@ -25,6 +33,7 @@ function ColumnView({ column, index }: ColumnViewProp) {
 
 interface GameFieldViewProps {
   gameField: FieldState
+  reveal: CallbackWithCoordinates
 }
 
 const testField: VisibleField = [
@@ -42,13 +51,16 @@ const testField: VisibleField = [
   ]
 ]
 
-export default function GameFieldView({ gameField }: GameFieldViewProps) {
+export default function GameFieldView({
+  gameField,
+  reveal
+}: GameFieldViewProps) {
   const visibleField = getVisibleField(gameField)
   // const visibleField = testField
   return (
     <View style={{ flex: 1, flexDirection: "row" }}>
       {visibleField.map((column, index) => {
-        return <ColumnView column={column} index={index} />
+        return <ColumnView column={column} index={index} reveal={reveal} />
       })}
     </View>
   )

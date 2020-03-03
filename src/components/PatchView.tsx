@@ -1,14 +1,35 @@
-import React from "react"
-import { View, Text, StyleSheet } from "react-native"
-import { Patch, PatchCoordinate, VisiblePatch } from "../model/Field"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
+import React from "react"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { PatchCoordinate, VisiblePatch, Patch } from "../model/Field"
+import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 
-interface PatchViewProp {
+interface PatchViewContentProps {
   patch: VisiblePatch
   coordinates: PatchCoordinate
 }
 
-export default function PatchView({ patch, coordinates }: PatchViewProp) {
+interface PatchViewProps extends PatchViewContentProps {
+  reveal: CallbackWithCoordinates
+}
+
+export default function PatchView({
+  patch,
+  coordinates,
+  reveal
+}: PatchViewProps) {
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        reveal(coordinates)
+      }}
+    >
+      <PatchViewContent patch={patch} coordinates={coordinates} />
+    </TouchableOpacity>
+  )
+}
+
+function PatchViewContent({ patch, coordinates }: PatchViewContentProps) {
   const position = coordinates.x + coordinates.y
   const alternatingStyle = position % 2 == 0 ? evenStyle : oddStyle
   switch (patch) {

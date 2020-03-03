@@ -12,7 +12,12 @@ export default function App() {
   )
   return (
     <View style={styles.container}>
-      <GameFieldView gameField={field} />
+      <GameFieldView
+        gameField={field}
+        reveal={({ x, y }) => {
+          console.log([x, y])
+        }}
+      />
     </View>
   )
 }
