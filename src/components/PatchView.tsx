@@ -27,6 +27,7 @@ export default function PatchView({ patch, coordinates }: PatchViewProp) {
         "#4885ed",
         "#f4c20d"
       ]
+      const diameter = 12
       return (
         <View
           style={[
@@ -34,11 +35,14 @@ export default function PatchView({ patch, coordinates }: PatchViewProp) {
             { backgroundColor: colors[position % colors.length] }
           ]}
         >
-          <MaterialCommunityIcons
-            name="bomb"
-            size="40"
-            color="#000"
-            style={{ opacity: 0.4 }}
+          <View
+            style={{
+              width: diameter,
+              height: diameter,
+              backgroundColor: "#000",
+              opacity: 0.4,
+              borderRadius: diameter / 2
+            }}
           />
         </View>
       )

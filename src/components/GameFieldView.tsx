@@ -27,22 +27,24 @@ interface GameFieldViewProps {
   gameField: FieldState
 }
 
-export default function GameFieldView({ gameField }: GameFieldViewProps) {
-  // const visibleField = getVisibleField(gameField)
-  const visibleField: VisibleField = [
-    [VisiblePatch.Grass, VisiblePatch.Empty, VisiblePatch.Bomb],
-    [VisiblePatch.Flag, VisiblePatch.AdjacentBomb1, VisiblePatch.AdjacentBomb2],
-    [
-      VisiblePatch.AdjacentBomb3,
-      VisiblePatch.AdjacentBomb4,
-      VisiblePatch.AdjacentBomb5
-    ],
-    [
-      VisiblePatch.AdjacentBomb6,
-      VisiblePatch.AdjacentBomb7,
-      VisiblePatch.AdjacentBomb8
-    ]
+const testField: VisibleField = [
+  [VisiblePatch.Grass, VisiblePatch.Empty, VisiblePatch.Bomb],
+  [VisiblePatch.Flag, VisiblePatch.AdjacentBomb1, VisiblePatch.AdjacentBomb2],
+  [
+    VisiblePatch.AdjacentBomb3,
+    VisiblePatch.AdjacentBomb4,
+    VisiblePatch.AdjacentBomb5
+  ],
+  [
+    VisiblePatch.AdjacentBomb6,
+    VisiblePatch.AdjacentBomb7,
+    VisiblePatch.AdjacentBomb8
   ]
+]
+
+export default function GameFieldView({ gameField }: GameFieldViewProps) {
+  const visibleField = getVisibleField(gameField)
+  // const visibleField = testField
   return (
     <View style={{ flex: 1, flexDirection: "row" }}>
       {visibleField.map((column, index) => {
