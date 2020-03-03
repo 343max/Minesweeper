@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, View, SafeAreaView } from "react-native"
 import GameFieldView from "./src/components/GameFieldView"
 import {
   emptyField,
@@ -29,17 +29,24 @@ export default function App() {
     }
   }
 
+  const flag = ({ x, y }: PatchCoordinate) => {
+    if (!field[x][y].isRevealed) {
+      field[x][y].isFlagged = !field[x][y].isFlagged
+      setField([...field])
+    }
+  }
+
   return (
-    <View style={styles.container}>
-      <GameFieldView gameField={field} reveal={reveal} />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <GameFieldView gameField={field} reveal={reveal} flag={flag} />
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#000",
     alignItems: "center",
     justifyContent: "center"
   }

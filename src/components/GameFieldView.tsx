@@ -13,11 +13,12 @@ interface ColumnViewProp {
   column: VisiblePatch[]
   index: number
   reveal: CallbackWithCoordinates
+  flag: CallbackWithCoordinates
 }
 
-function ColumnView({ column, index, reveal }: ColumnViewProp) {
+function ColumnView({ column, index, reveal, flag }: ColumnViewProp) {
   return (
-    <View style={{ flex: 1, flexDirection: "column" }}>
+    <View style={{ flexDirection: "column" }}>
       {column.map((patch, row) => {
         return (
           <PatchView
@@ -25,6 +26,7 @@ function ColumnView({ column, index, reveal }: ColumnViewProp) {
             patch={patch}
             coordinates={{ x: index, y: row }}
             reveal={reveal}
+            flag={flag}
           />
         )
       })}
@@ -35,6 +37,7 @@ function ColumnView({ column, index, reveal }: ColumnViewProp) {
 interface GameFieldViewProps {
   gameField: FieldState
   reveal: CallbackWithCoordinates
+  flag: CallbackWithCoordinates
 }
 
 const testField: VisibleField = [
@@ -54,19 +57,27 @@ const testField: VisibleField = [
 
 export default function GameFieldView({
   gameField,
-  reveal
+  reveal,
+  flag
 }: GameFieldViewProps) {
   const visibleField = getVisibleField(gameField)
-  console.dir(visibleField)
   // const visibleField = testField
   return (
-    <View style={{ flex: 1, flexDirection: "row" }}>
+    <View
+      style={{
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        alignContent: "center"
+      }}
+    >
       {visibleField.map((column, index) => {
         return (
           <ColumnView
             column={column}
             index={index}
             reveal={reveal}
+            flag={flag}
             key={`${index}`}
           />
         )

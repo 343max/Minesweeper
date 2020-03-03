@@ -11,17 +11,24 @@ interface PatchViewContentProps {
 
 interface PatchViewProps extends PatchViewContentProps {
   reveal: CallbackWithCoordinates
+  flag: CallbackWithCoordinates
 }
 
 export default function PatchView({
   patch,
   coordinates,
-  reveal
+  reveal,
+  flag
 }: PatchViewProps) {
+  const disabled = patch != VisiblePatch.Grass && patch != VisiblePatch.Flag
   return (
     <TouchableOpacity
+      disabled={disabled}
       onPress={() => {
         reveal(coordinates)
+      }}
+      onLongPress={() => {
+        flag(coordinates)
       }}
     >
       <PatchViewContent patch={patch} coordinates={coordinates} />
@@ -70,7 +77,7 @@ function PatchViewContent({ patch, coordinates }: PatchViewContentProps) {
     case VisiblePatch.Flag:
       return (
         <View style={[style.box, alternatingStyle.grass]}>
-          <MaterialCommunityIcons name="flag" color="#f03507" size="40" />
+          <MaterialCommunityIcons name="flag" color="#f03507" size={20} />
         </View>
       )
     case VisiblePatch.AdjacentBomb1:
