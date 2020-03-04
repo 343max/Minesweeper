@@ -7,6 +7,7 @@ import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 interface PatchViewContentProps {
   patch: VisiblePatch
   coordinates: PatchCoordinate
+  sideLength: number
 }
 
 interface PatchViewProps extends PatchViewContentProps {
@@ -18,7 +19,8 @@ export default function PatchView({
   patch,
   coordinates,
   reveal,
-  flag
+  flag,
+  sideLength
 }: PatchViewProps) {
   const disabled = patch != VisiblePatch.Grass && patch != VisiblePatch.Flag
   return (
@@ -31,19 +33,28 @@ export default function PatchView({
         flag(coordinates)
       }}
     >
-      <PatchViewContent patch={patch} coordinates={coordinates} />
+      <PatchViewContent
+        patch={patch}
+        coordinates={coordinates}
+        sideLength={sideLength}
+      />
     </TouchableOpacity>
   )
 }
 
-function PatchViewContent({ patch, coordinates }: PatchViewContentProps) {
+function PatchViewContent({
+  patch,
+  coordinates,
+  sideLength
+}: PatchViewContentProps) {
+  const sizeStyle = { width: sideLength, height: sideLength }
   const position = coordinates.x + coordinates.y
   const alternatingStyle = position % 2 == 0 ? evenStyle : oddStyle
   switch (patch) {
     case VisiblePatch.Grass:
-      return <View style={[style.box, alternatingStyle.grass]} />
+      return <View style={[sizeStyle, style.box, alternatingStyle.grass]} />
     case VisiblePatch.Empty:
-      return <View style={[style.box, alternatingStyle.empty]} />
+      return <View style={[sizeStyle, style.box, alternatingStyle.empty]} />
     case VisiblePatch.Mine:
       const colors = [
         "#008744",
@@ -55,10 +66,11 @@ function PatchViewContent({ patch, coordinates }: PatchViewContentProps) {
         "#4885ed",
         "#f4c20d"
       ]
-      const diameter = 12
+      const diameter = Math.round((sideLength * 0.4) / 2) * 2
       return (
         <View
           style={[
+            sizeStyle,
             style.box,
             { backgroundColor: colors[position % colors.length] }
           ]}
@@ -76,8 +88,12 @@ function PatchViewContent({ patch, coordinates }: PatchViewContentProps) {
       )
     case VisiblePatch.Flag:
       return (
-        <View style={[style.box, alternatingStyle.grass]}>
-          <MaterialCommunityIcons name="flag" color="#f03507" size={20} />
+        <View style={[sizeStyle, style.box, alternatingStyle.grass]}>
+          <MaterialCommunityIcons
+            name="flag"
+            color="#f03507"
+            size={Math.round(sideLength * 0.5)}
+          />
         </View>
       )
     case VisiblePatch.AdjacentMine1:
@@ -109,9 +125,14 @@ function PatchViewContent({ patch, coordinates }: PatchViewContentProps) {
         "#f23607"
       ]
       return (
-        <View style={[style.box, alternatingStyle.empty]}>
-          <Text style={{ color: color[index], fontWeight: "700" }}>{`${index +
-            1}`}</Text>
+        <View style={[sizeStyle, style.box, alternatingStyle.empty]}>
+          <Text
+            style={{
+              color: color[index],
+              fontWeight: "700",
+              fontSize: sideLength * 0.5
+            }}
+          >{`${index + 1}`}</Text>
         </View>
       )
   }
@@ -119,8 +140,6 @@ function PatchViewContent({ patch, coordinates }: PatchViewContentProps) {
 
 const style = StyleSheet.create({
   box: {
-    width: 30,
-    height: 30,
     justifyContent: "center",
     alignItems: "center"
   }

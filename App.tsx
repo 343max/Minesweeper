@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import { StyleSheet, View, SafeAreaView } from "react-native"
-import GameFieldView from "./src/components/GameFieldView"
+import { StyleSheet, View, SafeAreaView, LayoutChangeEvent } from "react-native"
+import GameFieldView, { Size } from "./src/components/GameFieldView"
 import {
   emptyField,
   FieldSize,
@@ -10,16 +10,16 @@ import {
 import { revealPatch } from "./src/model/Reveal"
 
 export default function App() {
-  const size: FieldSize = { width: 10, height: 8 }
+  const fieldSize: FieldSize = { width: 10, height: 8 }
   const mineCount = 10
-  const [field, setField] = useState(emptyField(size))
-  const [firstReveal, setFirstReveal] = useState(true)
 
+  const [field, setField] = useState(emptyField(fieldSize))
+  const [firstReveal, setFirstReveal] = useState(true)
   const reveal = (coordinates: PatchCoordinate) => {
     if (firstReveal) {
       setFirstReveal(false)
       const initialField = revealPatch(
-        generateMinefield(size, mineCount, coordinates),
+        generateMinefield(fieldSize, mineCount, coordinates),
         coordinates
       )
       setField(initialField)
@@ -36,9 +36,21 @@ export default function App() {
     }
   }
 
+  const [viewSize, setViewSize] = useState<Size>({ width: 0, height: 0 })
+  const onLayout = (event: LayoutChangeEvent) => {
+    const { width, height } = event.nativeEvent.layout
+
+    setViewSize({ width, height })
+  }
+
   return (
-    <SafeAreaView style={styles.container}>
-      <GameFieldView gameField={field} reveal={reveal} flag={flag} />
+    <SafeAreaView style={styles.container} onLayout={onLayout}>
+      <GameFieldView
+        gameField={field}
+        reveal={reveal}
+        flag={flag}
+        maxSize={viewSize}
+      />
     </SafeAreaView>
   )
 }

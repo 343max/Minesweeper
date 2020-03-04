@@ -1,22 +1,30 @@
 import React from "react"
-import { View } from "react-native"
+import { View, ViewProps } from "react-native"
+import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 import {
   FieldState,
   getVisibleField,
+  VisibleField,
   VisiblePatch,
-  VisibleField
+  getFieldSize
 } from "../model/PlayingField"
 import PatchView from "./PatchView"
-import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 
 interface ColumnViewProp {
   column: VisiblePatch[]
   index: number
   reveal: CallbackWithCoordinates
   flag: CallbackWithCoordinates
+  sideLength: number
 }
 
-function ColumnView({ column, index, reveal, flag }: ColumnViewProp) {
+function ColumnView({
+  column,
+  index,
+  reveal,
+  flag,
+  sideLength
+}: ColumnViewProp) {
   return (
     <View style={{ flexDirection: "column" }}>
       {column.map((patch, row) => {
@@ -27,6 +35,7 @@ function ColumnView({ column, index, reveal, flag }: ColumnViewProp) {
             coordinates={{ x: index, y: row }}
             reveal={reveal}
             flag={flag}
+            sideLength={sideLength}
           />
         )
       })}
@@ -34,34 +43,37 @@ function ColumnView({ column, index, reveal, flag }: ColumnViewProp) {
   )
 }
 
+export interface Size {
+  width: number
+  height: number
+}
+
 interface GameFieldViewProps {
   gameField: FieldState
   reveal: CallbackWithCoordinates
   flag: CallbackWithCoordinates
+  maxSize: Size
 }
-
-const testField: VisibleField = [
-  [VisiblePatch.Grass, VisiblePatch.Empty, VisiblePatch.Mine],
-  [VisiblePatch.Flag, VisiblePatch.AdjacentMine1, VisiblePatch.AdjacentMine2],
-  [
-    VisiblePatch.AdjacentMine3,
-    VisiblePatch.AdjacentMine4,
-    VisiblePatch.AdjacentMine5
-  ],
-  [
-    VisiblePatch.AdjacentMine6,
-    VisiblePatch.AdjacentMine7,
-    VisiblePatch.AdjacentMine8
-  ]
-]
 
 export default function GameFieldView({
   gameField,
   reveal,
-  flag
+  flag,
+  maxSize,
+  onLayout
 }: GameFieldViewProps) {
   const visibleField = getVisibleField(gameField)
-  // const visibleField = testField
+
+  const sideLength = (() => {
+    const fieldSize = getFieldSize(gameField)
+    return Math.floor(
+      Math.min(
+        maxSize.width / fieldSize.width,
+        maxSize.height / fieldSize.height
+      )
+    )
+  })()
+
   return (
     <View
       style={{
@@ -79,6 +91,7 @@ export default function GameFieldView({
             reveal={reveal}
             flag={flag}
             key={`${index}`}
+            sideLength={sideLength}
           />
         )
       })}
