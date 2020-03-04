@@ -1,5 +1,12 @@
-import React from "react"
-import { View, Text, StyleSheet, TouchableOpacity, Button } from "react-native"
+import React, { useState, useEffect } from "react"
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+  Animated
+} from "react-native"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { GameState } from "../model/PlayingField"
 
@@ -12,13 +19,35 @@ export default function GameOverOverlay({
   restart,
   gameState
 }: GameOverlayProps) {
+  const [fadeAnimation] = useState(new Animated.Value(0))
+  const [slideInAnimation] = useState(new Animated.Value(-150))
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnimation, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true
+      }),
+      Animated.spring(slideInAnimation, { toValue: 0, useNativeDriver: true })
+    ]).start()
+  })
+
   const message =
     gameState == GameState.Won
       ? "🎉 Congratulations! 🎉"
       : "😫 Bummer! You lost 😭"
 
   return (
-    <View style={styles.box}>
+    <Animated.View
+      style={[
+        styles.box,
+        {
+          opacity: fadeAnimation,
+          transform: [{ translateY: slideInAnimation }]
+        }
+      ]}
+    >
       <Text style={{ fontSize: 28, fontWeight: "bold" }}>{message}</Text>
       <TouchableOpacity style={styles.button} onPress={restart}>
         <MaterialCommunityIcons name="reload" size={28} />
@@ -26,7 +55,7 @@ export default function GameOverOverlay({
           Start Over
         </Text>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   )
 }
 
