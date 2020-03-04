@@ -33,10 +33,10 @@ export default function GameOverOverlay({
     ]).start()
   })
 
-  const message =
+  const messages =
     gameState == GameState.Won
-      ? "🎉 Congratulations! 🎉"
-      : "😫 Bummer! You lost 😭"
+      ? { text: "🎉 Congratulations! 🎉", buttonTitle: "Once More!" }
+      : { text: "😫 Bummer! You lost 😭", buttonTitle: "Retry" }
 
   return (
     <Animated.View
@@ -48,11 +48,11 @@ export default function GameOverOverlay({
         }
       ]}
     >
-      <Text style={{ fontSize: 28, fontWeight: "bold" }}>{message}</Text>
+      <Text style={{ fontSize: 28, fontWeight: "bold" }}>{messages.text}</Text>
       <TouchableOpacity style={styles.button} onPress={restart}>
         <MaterialCommunityIcons name="reload" size={28} />
         <Text style={{ fontSize: 28, fontWeight: "bold", marginLeft: 7 }}>
-          Start Over
+          {messages.buttonTitle}
         </Text>
       </TouchableOpacity>
     </Animated.View>
