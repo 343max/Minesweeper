@@ -28,11 +28,14 @@ export default function PatchView({
   sideLength
 }: PatchViewProps) {
   const disabled = patch != VisiblePatch.Grass && patch != VisiblePatch.Flag
+  const revealable = patch != VisiblePatch.Flag
   return (
     <TouchableOpacity
       disabled={disabled}
       onPress={() => {
-        reveal(coordinates)
+        if (revealable) {
+          reveal(coordinates)
+        }
       }}
       onLongPress={() => {
         flag(coordinates)
