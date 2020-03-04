@@ -157,6 +157,24 @@ test("should show grass for unrevealed mine", () => {
   expect(patch).toBe(VisiblePatch.Grass)
 })
 
+test("should show flag for a flagged unrevealed mine", () => {
+  const field: FieldState = [[f(1, 1, 0)]]
+  const patch = getVisiblePatch(field, { x: 0, y: 0 })
+  expect(patch).toBe(VisiblePatch.Flag)
+})
+
+test("should show mine for a flagged revealed mine", () => {
+  const field: FieldState = [[f(1, 1, 1)]]
+  const patch = getVisiblePatch(field, { x: 0, y: 0 })
+  expect(patch).toBe(VisiblePatch.Mine)
+})
+
+test("should show sand for a flagged revealed sand", () => {
+  const field: FieldState = [[f(0, 1, 1)]]
+  const patch = getVisiblePatch(field, { x: 0, y: 0 })
+  expect(patch).toBe(VisiblePatch.Empty)
+})
+
 test("should show empty", () => {
   const field: FieldState = [[f(0, 0, 1)]]
   const patch = getVisiblePatch(field, { x: 0, y: 0 })

@@ -92,7 +92,7 @@ export function getVisiblePatch(
     coordinate.y
   ]
 
-  if (isFlagged) {
+  if (isFlagged && !isRevealed) {
     return VisiblePatch.Flag
   } else if (!isRevealed) {
     return VisiblePatch.Grass
