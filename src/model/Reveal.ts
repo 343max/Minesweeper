@@ -3,7 +3,7 @@ import {
   PatchCoordinate,
   getFieldSize,
   getAdjacentBombCount
-} from "./Field"
+} from "./PlayingField"
 
 export function revealPatch(
   field: FieldState,

@@ -6,7 +6,7 @@ import {
   FieldSize,
   PatchCoordinate,
   generateBombField
-} from "./src/model/Field"
+} from "./src/model/PlayingField"
 import { revealPatch } from "./src/model/Reveal"
 
 export default function App() {

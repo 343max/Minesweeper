@@ -5,7 +5,7 @@ import {
   getVisibleField,
   VisiblePatch,
   VisibleField
-} from "../model/Field"
+} from "../model/PlayingField"
 import PatchView from "./PatchView"
 import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 
