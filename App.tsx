@@ -8,7 +8,8 @@ import {
   GameState,
   generateMinefield,
   getGameState,
-  PatchCoordinate
+  PatchCoordinate,
+  getRemainingFlags
 } from "./src/model/PlayingField"
 import { revealMines, revealPatch } from "./src/model/Reveal"
 
@@ -19,6 +20,9 @@ export default function App() {
   const [gameState, setGameState] = useState(GameState.Playing)
   const [field, setField] = useState(emptyField(fieldSize))
   const [firstReveal, setFirstReveal] = useState(true)
+
+  const remainingFlagCount = firstReveal ? mineCount : getRemainingFlags(field)
+
   const reveal = (coordinates: PatchCoordinate) => {
     if (firstReveal) {
       setFirstReveal(false)
@@ -42,7 +46,7 @@ export default function App() {
   }
 
   const flag = ({ x, y }: PatchCoordinate) => {
-    if (!field[x][y].isRevealed) {
+    if (!field[x][y].isRevealed && remainingFlagCount > 0) {
       field[x][y].isFlagged = !field[x][y].isFlagged
       setField([...field])
     }
@@ -77,6 +81,7 @@ export default function App() {
         flag={flag}
         maxSize={viewSize}
         gameState={gameState}
+        remainingFlagCount={remainingFlagCount}
       />
       {overlay}
     </SafeAreaView>

@@ -176,10 +176,14 @@ export enum GameState {
   Won = "Won"
 }
 
-export function getGameState(field: FieldState): GameState {
-  const flatField = field.reduce((array, row) => {
+function getFlattenedField(field: FieldState): Patch[] {
+  return field.reduce((array, row) => {
     return array.concat(row)
   }, [])
+}
+
+export function getGameState(field: FieldState): GameState {
+  const flatField = getFlattenedField(field)
 
   if (
     flatField.find(patch => {
@@ -196,4 +200,15 @@ export function getGameState(field: FieldState): GameState {
   } else {
     return GameState.Won
   }
+}
+
+export function getRemainingFlags(field: FieldState): number {
+  const flatField = getFlattenedField(field)
+  const mineCount = flatField.reduce((count, patch) => {
+    return count + (patch.isMine ? 1 : 0)
+  }, 0)
+  const flagCount = flatField.reduce((count, patch) => {
+    return count + (patch.isFlagged ? 1 : 0)
+  }, 0)
+  return mineCount - flagCount
 }

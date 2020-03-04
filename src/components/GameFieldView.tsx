@@ -8,6 +8,7 @@ import {
   GameState
 } from "../model/PlayingField"
 import { ColumnView } from "./ColumnView"
+import GameStatBar from "./GameStatBar"
 
 export interface Size {
   width: number
@@ -20,6 +21,7 @@ interface GameFieldViewProps {
   flag: CallbackWithCoordinates
   maxSize: Size
   gameState: GameState
+  remainingFlagCount: number
 }
 
 export default function GameFieldView({
@@ -27,7 +29,8 @@ export default function GameFieldView({
   reveal,
   flag,
   maxSize,
-  gameState
+  gameState,
+  remainingFlagCount
 }: GameFieldViewProps) {
   const visibleField = getVisibleField(gameField)
 
@@ -42,27 +45,29 @@ export default function GameFieldView({
   })()
 
   return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: "row",
-        alignItems: "center",
-        alignContent: "center"
-      }}
-    >
-      {visibleField.map((column, index) => {
-        return (
-          <ColumnView
-            column={column}
-            index={index}
-            reveal={reveal}
-            flag={flag}
-            key={`${index}`}
-            sideLength={sideLength}
-            gameState={gameState}
-          />
-        )
-      })}
+    <View style={{ flex: 1, justifyContent: "center" }}>
+      <GameStatBar flagsRemaining={remainingFlagCount} />
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          alignContent: "center"
+        }}
+      >
+        {visibleField.map((column, index) => {
+          return (
+            <ColumnView
+              column={column}
+              index={index}
+              reveal={reveal}
+              flag={flag}
+              key={`${index}`}
+              sideLength={sideLength}
+              gameState={gameState}
+            />
+          )
+        })}
+      </View>
     </View>
   )
 }

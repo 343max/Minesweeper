@@ -15,7 +15,8 @@ import {
   FieldSize,
   getGameState,
   GameState,
-  getAdjacentMineCountFromVisiblePatch
+  getAdjacentMineCountFromVisiblePatch,
+  getRemainingFlags
 } from "../src/model/PlayingField"
 
 function f(isMine: number, isFlagged: number, isRevealed: number): Patch {
@@ -243,6 +244,12 @@ test("should return GameState.GameWon when there are no more unrevealed patches 
   const field: FieldState = [[f(1, 0, 0), f(0, 0, 1), f(0, 0, 1)]]
   const state = getGameState(field)
   expect(state).toBe(GameState.Won)
+})
+
+test("should return the correct remaining flags count", () => {
+  const field = [[f(1, 1, 0), f(1, 0, 0), f(0, 0, 0)]]
+  const remainingFlags = getRemainingFlags(field)
+  expect(remainingFlags).toBe(1)
 })
 
 test("should return the correct mine count", () => {
