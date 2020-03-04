@@ -12,7 +12,9 @@ import {
   VisiblePatch,
   BoolField,
   Patch,
-  FieldSize
+  FieldSize,
+  getGameState,
+  GameState
 } from "../src/model/PlayingField"
 
 function f(isMine: number, isFlagged: number, isRevealed: number): Patch {
@@ -204,4 +206,22 @@ test("should generate a visible field", () => {
   ]
 
   expect(visibleField).toStrictEqual(expectedVisibleField)
+})
+
+test("should return GameState.Playing when the user is still playing", () => {
+  const field: FieldState = [[f(1, 0, 0), f(0, 1, 0), f(0, 0, 1)]]
+  const state = getGameState(field)
+  expect(state).toBe(GameState.Playing)
+})
+
+test("should return GameState.GameLost when a patch is revealed that contains a mine", () => {
+  const field: FieldState = [[f(1, 0, 1), f(0, 1, 0), f(0, 0, 1)]]
+  const state = getGameState(field)
+  expect(state).toBe(GameState.Lost)
+})
+
+test("should return GameState.GameWon when there are no more unrevealed patches without", () => {
+  const field: FieldState = [[f(1, 0, 0), f(0, 0, 1), f(0, 0, 1)]]
+  const state = getGameState(field)
+  expect(state).toBe(GameState.Won)
 })

@@ -163,3 +163,31 @@ export function generateMinefield(
 
   return field
 }
+
+export enum GameState {
+  Playing = "Playing",
+  Lost = "Lost",
+  Won = "Won"
+}
+
+export function getGameState(field: FieldState): GameState {
+  const flatField = field.reduce((array, row) => {
+    return array.concat(row)
+  }, [])
+
+  if (
+    flatField.find(patch => {
+      return patch.isMine && patch.isRevealed
+    })
+  ) {
+    return GameState.Lost
+  } else if (
+    flatField.find(patch => {
+      return !patch.isMine && !patch.isRevealed
+    })
+  ) {
+    return GameState.Playing
+  } else {
+    return GameState.Won
+  }
+}

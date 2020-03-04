@@ -45,3 +45,14 @@ export function revealPatch(
 
   return field
 }
+
+export function revealMines(field: FieldState): FieldState {
+  return field.map(column => {
+    return column.map(patch => {
+      if (patch.isMine) {
+        patch.isRevealed = true
+      }
+      return patch
+    })
+  })
+}
