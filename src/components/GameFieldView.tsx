@@ -1,47 +1,12 @@
 import React from "react"
-import { View, ViewProps } from "react-native"
+import { View } from "react-native"
 import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 import {
   FieldState,
-  getVisibleField,
-  VisibleField,
-  VisiblePatch,
-  getFieldSize
+  getFieldSize,
+  getVisibleField
 } from "../model/PlayingField"
-import PatchView from "./PatchView"
-
-interface ColumnViewProp {
-  column: VisiblePatch[]
-  index: number
-  reveal: CallbackWithCoordinates
-  flag: CallbackWithCoordinates
-  sideLength: number
-}
-
-function ColumnView({
-  column,
-  index,
-  reveal,
-  flag,
-  sideLength
-}: ColumnViewProp) {
-  return (
-    <View style={{ flexDirection: "column" }}>
-      {column.map((patch, row) => {
-        return (
-          <PatchView
-            key={`${index}, ${row}`}
-            patch={patch}
-            coordinates={{ x: index, y: row }}
-            reveal={reveal}
-            flag={flag}
-            sideLength={sideLength}
-          />
-        )
-      })}
-    </View>
-  )
-}
+import { ColumnView } from "./ColumnView"
 
 export interface Size {
   width: number
@@ -59,8 +24,7 @@ export default function GameFieldView({
   gameField,
   reveal,
   flag,
-  maxSize,
-  onLayout
+  maxSize
 }: GameFieldViewProps) {
   const visibleField = getVisibleField(gameField)
 
