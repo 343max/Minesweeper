@@ -9,18 +9,18 @@ export interface FieldSize {
 }
 
 export enum VisiblePatch {
-  Grass = "Grass",
-  Empty = "Empty",
-  Mine = "Mine",
-  Flag = "Flag",
-  AdjacentMine1 = "AdjacentMine1",
-  AdjacentMine2 = "AdjacentMine2",
-  AdjacentMine3 = "AdjacentMine3",
-  AdjacentMine4 = "AdjacentMine4",
-  AdjacentMine5 = "AdjacentMine5",
-  AdjacentMine6 = "AdjacentMine6",
-  AdjacentMine7 = "AdjacentMine7",
-  AdjacentMine8 = "AdjacentMine8"
+  Grass,
+  Empty,
+  Mine,
+  Flag,
+  AdjacentMine1,
+  AdjacentMine2,
+  AdjacentMine3,
+  AdjacentMine4,
+  AdjacentMine5,
+  AdjacentMine6,
+  AdjacentMine7,
+  AdjacentMine8
 }
 
 export type VisibleField = VisiblePatch[][]
@@ -52,6 +52,12 @@ export function getAdjacentPatches(
   ].filter(({ x, y }) => {
     return x >= 0 && y >= 0 && x < width && y < height
   })
+}
+
+export function getAdjacentMineCountFromVisiblePatch(
+  patch: VisiblePatch
+): number {
+  return patch - VisiblePatch.AdjacentMine1 + 1
 }
 
 export function getFieldSize(field: FieldState): FieldSize {

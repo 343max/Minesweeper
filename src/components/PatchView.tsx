@@ -1,7 +1,12 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import React from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { PatchCoordinate, VisiblePatch, Patch } from "../model/PlayingField"
+import {
+  PatchCoordinate,
+  VisiblePatch,
+  Patch,
+  getAdjacentMineCountFromVisiblePatch
+} from "../model/PlayingField"
 import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 
 interface PatchViewContentProps {
@@ -104,35 +109,26 @@ function PatchViewContent({
     case VisiblePatch.AdjacentMine6:
     case VisiblePatch.AdjacentMine7:
     case VisiblePatch.AdjacentMine8:
-      const index = [
-        VisiblePatch.AdjacentMine1,
-        VisiblePatch.AdjacentMine2,
-        VisiblePatch.AdjacentMine3,
-        VisiblePatch.AdjacentMine4,
-        VisiblePatch.AdjacentMine5,
-        VisiblePatch.AdjacentMine6,
-        VisiblePatch.AdjacentMine7,
-        VisiblePatch.AdjacentMine8
-      ].indexOf(patch)
+      const mineCount = getAdjacentMineCountFromVisiblePatch(patch)
       const color = [
         "#1976d2",
         "#388e3c",
         "#f23607",
-        "#f23607",
-        "#f23607",
-        "#f23607",
-        "#f23607",
-        "#f23607"
+        "#7b1fa2",
+        "#7b1fa2",
+        "#7b1fa2",
+        "#7b1fa2",
+        "#7b1fa2"
       ]
       return (
         <View style={[sizeStyle, style.box, alternatingStyle.empty]}>
           <Text
             style={{
-              color: color[index],
+              color: color[mineCount - 1],
               fontWeight: "700",
               fontSize: sideLength * 0.5
             }}
-          >{`${index + 1}`}</Text>
+          >{`${mineCount}`}</Text>
         </View>
       )
   }
