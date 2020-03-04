@@ -1,22 +1,16 @@
 import React, { useState } from "react"
-import {
-  StyleSheet,
-  View,
-  SafeAreaView,
-  LayoutChangeEvent,
-  Text
-} from "react-native"
+import { LayoutChangeEvent, SafeAreaView, StyleSheet } from "react-native"
 import GameFieldView, { Size } from "./src/components/GameFieldView"
+import GameOverOverlay from "./src/components/GameOverOverlay"
 import {
   emptyField,
   FieldSize,
-  PatchCoordinate,
-  generateMinefield,
   GameState,
-  getGameState
+  generateMinefield,
+  getGameState,
+  PatchCoordinate
 } from "./src/model/PlayingField"
-import { revealPatch, revealMines } from "./src/model/Reveal"
-import GameOverOverlay from "./src/components/GameOverOverlay"
+import { revealMines, revealPatch } from "./src/model/Reveal"
 
 export default function App() {
   const fieldSize: FieldSize = { width: 8, height: 10 }
