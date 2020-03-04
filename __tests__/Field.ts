@@ -1,23 +1,23 @@
 import {
   emptyField,
   FieldState,
-  generateBombField,
-  getAdjacentBombCount,
+  generateMinefield,
+  getAdjacentMineCount,
   getAdjacentPatches,
   getFieldSize,
   getVisibleField,
   getVisiblePatch,
-  getVisiblePatchForBombCount,
+  getVisiblePatchForMineCount,
   VisibleField,
   VisiblePatch,
   BoolField,
   Patch,
   FieldSize
-} from "../src/model/Field"
+} from "../src/model/PlayingField"
 
-function f(isBomb: number, isFlagged: number, isRevealed: number): Patch {
+function f(isMine: number, isFlagged: number, isRevealed: number): Patch {
   return {
-    isBomb: isBomb == 1,
+    isMine: isMine == 1,
     isFlagged: isFlagged == 1,
     isRevealed: isRevealed == 1
   }
@@ -26,7 +26,7 @@ function f(isBomb: number, isFlagged: number, isRevealed: number): Patch {
 test("should generate a patch", () => {
   const patch = f(0, 1, 1)
   expect(f(0, 1, 1)).toStrictEqual({
-    isBomb: false,
+    isMine: false,
     isFlagged: true,
     isRevealed: true
   })
@@ -42,15 +42,15 @@ test("should generate an empty filed", () => {
   expect(field).toStrictEqual(expectedField)
 })
 
-test("should generate a bomb field", () => {
-  const field = generateBombField({ width: 2, height: 3 }, 5, { x: 1, y: 2 })
+test("should generate a minefield", () => {
+  const field = generateMinefield({ width: 2, height: 3 }, 5, { x: 1, y: 2 })
 
-  const bombCount = field.reduce((count, row) => {
+  const mineCount = field.reduce((count, row) => {
     return row.reduce((count, patch) => {
-      return count + (patch.isBomb ? 1 : 0)
+      return count + (patch.isMine ? 1 : 0)
     }, count)
   }, 0)
-  expect(bombCount).toBe(5)
+  expect(mineCount).toBe(5)
 
   expect(field[1][2]).toStrictEqual(f(0, 0, 0))
 })
@@ -85,7 +85,7 @@ test("should get the correct adjecant patches", () => {
 })
 
 test("should messure a generated field size correctly", () => {
-  const field = generateBombField({ width: 5, height: 3 }, 0, { x: 0, y: 0 })
+  const field = generateMinefield({ width: 5, height: 3 }, 0, { x: 0, y: 0 })
   const size = getFieldSize(field)
   expect(size).toEqual({ width: 5, height: 3 })
 })
@@ -96,7 +96,7 @@ test("should correctly messure an empty field", () => {
 })
 
 test("should check nearby to be empty", () => {
-  const count = getAdjacentBombCount(
+  const count = getAdjacentMineCount(
     [
       [f(0, 0, 0), f(0, 0, 0), f(0, 0, 0)],
       [f(0, 0, 0), f(0, 0, 0), f(0, 0, 0)],
@@ -107,8 +107,8 @@ test("should check nearby to be empty", () => {
   expect(count).toBe(0)
 })
 
-test("should check nearby for bombs", () => {
-  const count = getAdjacentBombCount(
+test("should check nearby for mines", () => {
+  const count = getAdjacentMineCount(
     [
       [f(1, 0, 0), f(1, 0, 0), f(1, 0, 0)],
       [f(1, 0, 0), f(0, 0, 0), f(1, 0, 0)],
@@ -125,22 +125,22 @@ test("should check nearby patches for mines correctly", () => {
     [f(0, 0, 1), f(0, 0, 1)]
   ]
 
-  expect(getAdjacentBombCount(field, { x: 1, y: 1 })).toBe(2)
+  expect(getAdjacentMineCount(field, { x: 1, y: 1 })).toBe(2)
 })
 
 test("should get Empty Patch", () => {
-  const patch = getVisiblePatchForBombCount(0)
+  const patch = getVisiblePatchForMineCount(0)
   expect(patch).toBe(VisiblePatch.Empty)
 })
 
-test("should get AdjacentBomb1", () => {
-  const patch = getVisiblePatchForBombCount(1)
-  expect(patch).toBe(VisiblePatch.AdjacentBomb1)
+test("should get AdjacentMine1", () => {
+  const patch = getVisiblePatchForMineCount(1)
+  expect(patch).toBe(VisiblePatch.AdjacentMine1)
 })
 
-test("should get AdjacentBomb7", () => {
-  const patch = getVisiblePatchForBombCount(7)
-  expect(patch).toBe(VisiblePatch.AdjacentBomb7)
+test("should get AdjacentMine7", () => {
+  const patch = getVisiblePatchForMineCount(7)
+  expect(patch).toBe(VisiblePatch.AdjacentMine7)
 })
 
 test("should show grass", () => {
@@ -149,7 +149,7 @@ test("should show grass", () => {
   expect(patch).toBe(VisiblePatch.Grass)
 })
 
-test("should show grass for unrevealed bomb", () => {
+test("should show grass for unrevealed mine", () => {
   const field: FieldState = [[f(1, 0, 0)]]
   const patch = getVisiblePatch(field, { x: 0, y: 0 })
   expect(patch).toBe(VisiblePatch.Grass)
@@ -167,22 +167,22 @@ test("should show flag", () => {
   expect(patch).toBe(VisiblePatch.Flag)
 })
 
-test("should show flag for marked bomb", () => {
+test("should show flag for marked mine", () => {
   const field: FieldState = [[f(1, 1, 0)]]
   const patch = getVisiblePatch(field, { x: 0, y: 0 })
   expect(patch).toBe(VisiblePatch.Flag)
 })
 
-test("should show bomb", () => {
+test("should show mine", () => {
   const field: FieldState = [[f(1, 0, 1)]]
   const patch = getVisiblePatch(field, { x: 0, y: 0 })
-  expect(patch).toBe(VisiblePatch.Bomb)
+  expect(patch).toBe(VisiblePatch.Mine)
 })
 
 test("should show nearby count for empty revealed", () => {
   const field: FieldState = [[f(0, 0, 1), f(1, 0, 0)]]
   const patch = getVisiblePatch(field, { x: 0, y: 0 })
-  expect(patch).toBe(VisiblePatch.AdjacentBomb1)
+  expect(patch).toBe(VisiblePatch.AdjacentMine1)
 })
 
 test("should show grass for empty un-revealed", () => {
@@ -200,7 +200,7 @@ test("should generate a visible field", () => {
   const visibleField = getVisibleField(field)
   const expectedVisibleField: VisibleField = [
     [VisiblePatch.Flag, VisiblePatch.Grass],
-    [VisiblePatch.AdjacentBomb2, VisiblePatch.AdjacentBomb2]
+    [VisiblePatch.AdjacentMine2, VisiblePatch.AdjacentMine2]
   ]
 
   expect(visibleField).toStrictEqual(expectedVisibleField)

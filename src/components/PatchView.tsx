@@ -44,7 +44,7 @@ function PatchViewContent({ patch, coordinates }: PatchViewContentProps) {
       return <View style={[style.box, alternatingStyle.grass]} />
     case VisiblePatch.Empty:
       return <View style={[style.box, alternatingStyle.empty]} />
-    case VisiblePatch.Bomb:
+    case VisiblePatch.Mine:
       const colors = [
         "#008744",
         "#f4c20d",
@@ -80,23 +80,23 @@ function PatchViewContent({ patch, coordinates }: PatchViewContentProps) {
           <MaterialCommunityIcons name="flag" color="#f03507" size={20} />
         </View>
       )
-    case VisiblePatch.AdjacentBomb1:
-    case VisiblePatch.AdjacentBomb2:
-    case VisiblePatch.AdjacentBomb3:
-    case VisiblePatch.AdjacentBomb4:
-    case VisiblePatch.AdjacentBomb5:
-    case VisiblePatch.AdjacentBomb6:
-    case VisiblePatch.AdjacentBomb7:
-    case VisiblePatch.AdjacentBomb8:
+    case VisiblePatch.AdjacentMine1:
+    case VisiblePatch.AdjacentMine2:
+    case VisiblePatch.AdjacentMine3:
+    case VisiblePatch.AdjacentMine4:
+    case VisiblePatch.AdjacentMine5:
+    case VisiblePatch.AdjacentMine6:
+    case VisiblePatch.AdjacentMine7:
+    case VisiblePatch.AdjacentMine8:
       const index = [
-        VisiblePatch.AdjacentBomb1,
-        VisiblePatch.AdjacentBomb2,
-        VisiblePatch.AdjacentBomb3,
-        VisiblePatch.AdjacentBomb4,
-        VisiblePatch.AdjacentBomb5,
-        VisiblePatch.AdjacentBomb6,
-        VisiblePatch.AdjacentBomb7,
-        VisiblePatch.AdjacentBomb8
+        VisiblePatch.AdjacentMine1,
+        VisiblePatch.AdjacentMine2,
+        VisiblePatch.AdjacentMine3,
+        VisiblePatch.AdjacentMine4,
+        VisiblePatch.AdjacentMine5,
+        VisiblePatch.AdjacentMine6,
+        VisiblePatch.AdjacentMine7,
+        VisiblePatch.AdjacentMine8
       ].indexOf(patch)
       const color = [
         "#1976d2",

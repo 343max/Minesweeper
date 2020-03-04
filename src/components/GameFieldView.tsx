@@ -41,17 +41,17 @@ interface GameFieldViewProps {
 }
 
 const testField: VisibleField = [
-  [VisiblePatch.Grass, VisiblePatch.Empty, VisiblePatch.Bomb],
-  [VisiblePatch.Flag, VisiblePatch.AdjacentBomb1, VisiblePatch.AdjacentBomb2],
+  [VisiblePatch.Grass, VisiblePatch.Empty, VisiblePatch.Mine],
+  [VisiblePatch.Flag, VisiblePatch.AdjacentMine1, VisiblePatch.AdjacentMine2],
   [
-    VisiblePatch.AdjacentBomb3,
-    VisiblePatch.AdjacentBomb4,
-    VisiblePatch.AdjacentBomb5
+    VisiblePatch.AdjacentMine3,
+    VisiblePatch.AdjacentMine4,
+    VisiblePatch.AdjacentMine5
   ],
   [
-    VisiblePatch.AdjacentBomb6,
-    VisiblePatch.AdjacentBomb7,
-    VisiblePatch.AdjacentBomb8
+    VisiblePatch.AdjacentMine6,
+    VisiblePatch.AdjacentMine7,
+    VisiblePatch.AdjacentMine8
   ]
 ]
 

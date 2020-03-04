@@ -2,7 +2,7 @@ import {
   FieldState,
   PatchCoordinate,
   getFieldSize,
-  getAdjacentBombCount
+  getAdjacentMineCount
 } from "./PlayingField"
 
 export function revealPatch(
@@ -20,13 +20,13 @@ export function revealPatch(
   while (toCheck.length > 0) {
     const { x, y } = toCheck.pop()
 
-    if (field[x][y].isRevealed || field[x][y].isBomb) {
+    if (field[x][y].isRevealed || field[x][y].isMine) {
       continue
     }
 
     field[x][y].isRevealed = true
 
-    if (getAdjacentBombCount(field, { x, y }) == 0) {
+    if (getAdjacentMineCount(field, { x, y }) == 0) {
       toCheck = [
         ...toCheck,
         ...[

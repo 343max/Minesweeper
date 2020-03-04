@@ -11,16 +11,16 @@ export interface FieldSize {
 export enum VisiblePatch {
   Grass = "Grass",
   Empty = "Empty",
-  Bomb = "Bomb",
+  Mine = "Mine",
   Flag = "Flag",
-  AdjacentBomb1 = "AdjacentBomb1",
-  AdjacentBomb2 = "AdjacentBomb2",
-  AdjacentBomb3 = "AdjacentBomb3",
-  AdjacentBomb4 = "AdjacentBomb4",
-  AdjacentBomb5 = "AdjacentBomb5",
-  AdjacentBomb6 = "AdjacentBomb6",
-  AdjacentBomb7 = "AdjacentBomb7",
-  AdjacentBomb8 = "AdjacentBomb8"
+  AdjacentMine1 = "AdjacentMine1",
+  AdjacentMine2 = "AdjacentMine2",
+  AdjacentMine3 = "AdjacentMine3",
+  AdjacentMine4 = "AdjacentMine4",
+  AdjacentMine5 = "AdjacentMine5",
+  AdjacentMine6 = "AdjacentMine6",
+  AdjacentMine7 = "AdjacentMine7",
+  AdjacentMine8 = "AdjacentMine8"
 }
 
 export type VisibleField = VisiblePatch[][]
@@ -28,7 +28,7 @@ export type VisibleField = VisiblePatch[][]
 export type BoolField = boolean[][]
 
 export interface Patch {
-  isBomb: boolean
+  isMine: boolean
   isFlagged: boolean
   isRevealed: boolean
 }
@@ -58,47 +58,49 @@ export function getFieldSize(field: FieldState): FieldSize {
   return { width: field.length, height: field[0]?.length ?? 0 }
 }
 
-export function getAdjacentBombCount(
+export function getAdjacentMineCount(
   field: FieldState,
   center: PatchCoordinate
 ): number {
   return getAdjacentPatches(getFieldSize(field), center).reduce(
     (count, { x, y }) => {
-      return count + (field[x][y].isBomb ? 1 : 0)
+      return count + (field[x][y].isMine ? 1 : 0)
     },
     0
   )
 }
 
-export function getVisiblePatchForBombCount(bombCount: number): VisiblePatch {
+export function getVisiblePatchForMineCount(mineCount: number): VisiblePatch {
   return [
     VisiblePatch.Empty,
-    VisiblePatch.AdjacentBomb1,
-    VisiblePatch.AdjacentBomb2,
-    VisiblePatch.AdjacentBomb3,
-    VisiblePatch.AdjacentBomb4,
-    VisiblePatch.AdjacentBomb5,
-    VisiblePatch.AdjacentBomb6,
-    VisiblePatch.AdjacentBomb7,
-    VisiblePatch.AdjacentBomb8
-  ][bombCount]
+    VisiblePatch.AdjacentMine1,
+    VisiblePatch.AdjacentMine2,
+    VisiblePatch.AdjacentMine3,
+    VisiblePatch.AdjacentMine4,
+    VisiblePatch.AdjacentMine5,
+    VisiblePatch.AdjacentMine6,
+    VisiblePatch.AdjacentMine7,
+    VisiblePatch.AdjacentMine8
+  ][mineCount]
 }
 
 export function getVisiblePatch(
   field: FieldState,
   coordinate: PatchCoordinate
 ): VisiblePatch {
-  const { isBomb, isFlagged, isRevealed } = field[coordinate.x][coordinate.y]
+  const { isMine: isMine, isFlagged, isRevealed } = field[coordinate.x][
+    coordinate.y
+  ]
 
   if (isFlagged) {
     return VisiblePatch.Flag
   } else if (!isRevealed) {
     return VisiblePatch.Grass
-  } else if (isBomb) {
-    return VisiblePatch.Bomb
+  } else if (isMine) {
+    return VisiblePatch.Mine
   } else {
-    const adjacentBombCount = getAdjacentBombCount(field, coordinate)
-    return getVisiblePatchForBombCount(adjacentBombCount)
+    const adjacentMineCount = getAdjacentMineCount(field, coordinate)
+    return getVisiblePatchForMineCount(adjacentMineCount)
   }
 }
 
@@ -127,7 +129,7 @@ export function emptyField({ width, height }: FieldSize): FieldState {
   return filledArray(width, () => {
     return filledArray(height, () => {
       return {
-        isBomb: false,
+        isMine: false,
         isFlagged: false,
         isRevealed: false
       }
@@ -135,9 +137,9 @@ export function emptyField({ width, height }: FieldSize): FieldState {
   })
 }
 
-export function generateBombField(
+export function generateMinefield(
   { width, height }: FieldSize,
-  bombCount: number,
+  mineCount: number,
   safePatch: PatchCoordinate
 ): FieldState {
   function getRandomInt(max: number): number {
@@ -147,15 +149,15 @@ export function generateBombField(
   let field = emptyField({ width, height })
 
   let currentCount = 0
-  while (currentCount < bombCount) {
+  while (currentCount < mineCount) {
     const x = getRandomInt(width),
       y = getRandomInt(height)
 
-    if (field[x][y].isBomb == true || (safePatch.x == x && safePatch.y == y)) {
+    if (field[x][y].isMine == true || (safePatch.x == x && safePatch.y == y)) {
       continue
     }
 
-    field[x][y].isBomb = true
+    field[x][y].isMine = true
     currentCount += 1
   }
 

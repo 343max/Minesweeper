@@ -5,7 +5,7 @@ import {
   emptyField,
   FieldSize,
   PatchCoordinate,
-  generateBombField
+  generateMinefield
 } from "./src/model/PlayingField"
 import { revealPatch } from "./src/model/Reveal"
 
@@ -19,7 +19,7 @@ export default function App() {
     if (firstReveal) {
       setFirstReveal(false)
       const initialField = revealPatch(
-        generateBombField(size, mineCount, coordinates),
+        generateMinefield(size, mineCount, coordinates),
         coordinates
       )
       setField(initialField)
