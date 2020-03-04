@@ -30,6 +30,10 @@ export function revealPatch(
       toCheck = [
         ...toCheck,
         ...[
+          { x: x - 1, y: y - 1 },
+          { x: x + 1, y: y - 1 },
+          { x: x - 1, y: y + 1 },
+          { x: x + 1, y: y + 1 },
           { x: x - 1, y },
           { x, y: y - 1 },
           { x: x + 1, y },
