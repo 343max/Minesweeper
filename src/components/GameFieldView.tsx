@@ -4,7 +4,8 @@ import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 import {
   FieldState,
   getFieldSize,
-  getVisibleField
+  getVisibleField,
+  GameState
 } from "../model/PlayingField"
 import { ColumnView } from "./ColumnView"
 
@@ -18,13 +19,15 @@ interface GameFieldViewProps {
   reveal: CallbackWithCoordinates
   flag: CallbackWithCoordinates
   maxSize: Size
+  gameState: GameState
 }
 
 export default function GameFieldView({
   gameField,
   reveal,
   flag,
-  maxSize
+  maxSize,
+  gameState
 }: GameFieldViewProps) {
   const visibleField = getVisibleField(gameField)
 
@@ -56,6 +59,7 @@ export default function GameFieldView({
             flag={flag}
             key={`${index}`}
             sideLength={sideLength}
+            gameState={gameState}
           />
         )
       })}

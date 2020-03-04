@@ -1,7 +1,7 @@
 import React from "react"
 import { View } from "react-native"
 import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
-import { VisiblePatch } from "../model/PlayingField"
+import { VisiblePatch, GameState } from "../model/PlayingField"
 import PatchView from "./PatchView"
 
 interface ColumnViewProp {
@@ -10,6 +10,7 @@ interface ColumnViewProp {
   reveal: CallbackWithCoordinates
   flag: CallbackWithCoordinates
   sideLength: number
+  gameState: GameState
 }
 
 export function ColumnView({
@@ -17,7 +18,8 @@ export function ColumnView({
   index,
   reveal,
   flag,
-  sideLength
+  sideLength,
+  gameState
 }: ColumnViewProp) {
   return (
     <View style={{ flexDirection: "column" }}>
@@ -30,6 +32,7 @@ export function ColumnView({
             reveal={reveal}
             flag={flag}
             sideLength={sideLength}
+            gameState={gameState}
           />
         )
       })}

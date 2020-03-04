@@ -82,6 +82,7 @@ export default function App() {
         reveal={reveal}
         flag={flag}
         maxSize={viewSize}
+        gameState={gameState}
       />
       {overlay}
     </SafeAreaView>

@@ -5,7 +5,8 @@ import {
   PatchCoordinate,
   VisiblePatch,
   Patch,
-  getAdjacentMineCountFromVisiblePatch
+  getAdjacentMineCountFromVisiblePatch,
+  GameState
 } from "../model/PlayingField"
 import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 
@@ -18,6 +19,7 @@ interface PatchViewContentProps {
 interface PatchViewProps extends PatchViewContentProps {
   reveal: CallbackWithCoordinates
   flag: CallbackWithCoordinates
+  gameState: GameState
 }
 
 export default function PatchView({
@@ -25,9 +27,12 @@ export default function PatchView({
   coordinates,
   reveal,
   flag,
-  sideLength
+  sideLength,
+  gameState
 }: PatchViewProps) {
-  const disabled = patch != VisiblePatch.Grass && patch != VisiblePatch.Flag
+  const disabled =
+    (patch != VisiblePatch.Grass && patch != VisiblePatch.Flag) ||
+    gameState != GameState.Playing
   const revealable = patch != VisiblePatch.Flag
   return (
     <TouchableOpacity
