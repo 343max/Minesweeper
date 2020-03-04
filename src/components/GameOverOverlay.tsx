@@ -19,10 +19,10 @@ export default function GameOverOverlay({
 
   return (
     <View style={styles.box}>
-      <Text style={{ fontSize: 60, fontWeight: "bold" }}>{message}</Text>
+      <Text style={{ fontSize: 28, fontWeight: "bold" }}>{message}</Text>
       <TouchableOpacity style={styles.button} onPress={restart}>
-        <MaterialCommunityIcons name="reload" size={50} />
-        <Text style={{ fontSize: 50, fontWeight: "bold", marginLeft: 20 }}>
+        <MaterialCommunityIcons name="reload" size={28} />
+        <Text style={{ fontSize: 28, fontWeight: "bold", marginLeft: 7 }}>
           Start Over
         </Text>
       </TouchableOpacity>
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   box: {
     position: "absolute",
     backgroundColor: rgba(255, 255, 255, 0.8),
-    padding: 30,
+    padding: 20,
     borderRadius: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 10 },
@@ -50,9 +50,9 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     flexDirection: "row",
-    alignItems: "baseline",
-    margin: 10,
-    padding: 20,
+    alignItems: "center",
+    marginTop: 15,
+    padding: 14,
     backgroundColor: rgba(0, 180, 0, 0.6),
     borderRadius: 20
   }
