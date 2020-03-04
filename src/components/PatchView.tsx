@@ -123,10 +123,10 @@ function PatchViewContent({
         "#388e3c",
         "#f23607",
         "#7b1fa2",
-        "#7b1fa2",
-        "#7b1fa2",
-        "#7b1fa2",
-        "#7b1fa2"
+        "#fd9006",
+        "#0897a7",
+        "#0897a7",
+        "#0897a7"
       ]
       return (
         <View style={[sizeStyle, style.box, alternatingStyle.empty]}>
