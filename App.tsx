@@ -19,7 +19,7 @@ import { revealPatch, revealMines } from "./src/model/Reveal"
 import GameOverOverlay from "./src/components/GameOverOverlay"
 
 export default function App() {
-  const fieldSize: FieldSize = { width: 10, height: 8 }
+  const fieldSize: FieldSize = { width: 8, height: 10 }
   const mineCount = 10
 
   const [gameState, setGameState] = useState(GameState.Playing)
