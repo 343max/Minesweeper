@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react"
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Button,
-  Animated
-} from "react-native"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { BlurView } from "@react-native-community/blur"
+import React, { useEffect, useState } from "react"
+import {
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native"
 import { GameState } from "../model/PlayingField"
 
 interface GameOverlayProps {
@@ -42,22 +42,30 @@ export default function GameOverOverlay({
     <View style={styles.container}>
       <Animated.View
         style={[
-          styles.dialog,
           {
             opacity: fadeAnimation,
             transform: [{ translateY: slideInAnimation }]
           }
         ]}
       >
-        <Text style={{ fontSize: 28, fontWeight: "bold" }}>
-          {messages.text}
-        </Text>
-        <TouchableOpacity style={styles.button} onPress={restart}>
-          <MaterialCommunityIcons name="reload" size={28} />
-          <Text style={{ fontSize: 28, fontWeight: "bold", marginLeft: 7 }}>
-            {messages.buttonTitle}
+        <BlurView blurType="extraDark" style={styles.dialog}>
+          <Text style={{ fontSize: 28, fontWeight: "bold", color: "#fff" }}>
+            {messages.text}
           </Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={restart}>
+            <MaterialCommunityIcons name="reload" size={28} color="#fff" />
+            <Text
+              style={{
+                fontSize: 28,
+                fontWeight: "bold",
+                marginLeft: 7,
+                color: "#fff"
+              }}
+            >
+              {messages.buttonTitle}
+            </Text>
+          </TouchableOpacity>
+        </BlurView>
       </Animated.View>
     </View>
   )
@@ -76,7 +84,6 @@ const styles = StyleSheet.create({
     paddingBottom: 60
   },
   dialog: {
-    backgroundColor: rgba(255, 255, 255, 0.8),
     padding: 20,
     borderRadius: 20,
     shadowColor: "#000",
