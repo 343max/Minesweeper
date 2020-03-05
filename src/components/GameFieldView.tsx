@@ -3,12 +3,11 @@ import { View } from "react-native"
 import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 import {
   FieldState,
+  GameState,
   getFieldSize,
-  getVisibleField,
-  GameState
+  getVisibleField
 } from "../model/PlayingField"
 import { ColumnView } from "./ColumnView"
-import GameStatBar from "./GameStatBar"
 
 export interface Size {
   width: number
@@ -45,8 +44,7 @@ export default function GameFieldView({
   })()
 
   return (
-    <View style={{ flex: 1, justifyContent: "center" }}>
-      <GameStatBar flagsRemaining={remainingFlagCount} />
+    <View style={{ justifyContent: "center" }}>
       <View
         style={{
           flexDirection: "row",

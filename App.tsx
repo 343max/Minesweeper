@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { LayoutChangeEvent, SafeAreaView, StyleSheet } from "react-native"
+import React, { useState, useEffect } from "react"
+import { LayoutChangeEvent, SafeAreaView, StyleSheet, View } from "react-native"
 import GameFieldView, { Size } from "./src/components/GameFieldView"
 import GameOverOverlay from "./src/components/GameOverOverlay"
 import {
@@ -12,6 +12,7 @@ import {
   getRemainingFlags
 } from "./src/model/PlayingField"
 import { revealMines, revealPatch } from "./src/model/Reveal"
+import GameStatBar from "./src/components/GameStatBar"
 
 export default function App() {
   const fieldSize: FieldSize = { width: 8, height: 10 }
@@ -20,8 +21,24 @@ export default function App() {
   const [gameState, setGameState] = useState(GameState.Playing)
   const [field, setField] = useState(emptyField(fieldSize))
   const [firstReveal, setFirstReveal] = useState(true)
+  const [startTime, setStartTime] = useState(0)
+  const [playtime, setPlaytime] = useState(0)
 
   const remainingFlagCount = firstReveal ? mineCount : getRemainingFlags(field)
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (gameState != GameState.Playing) return
+
+      if (startTime == 0) {
+        setPlaytime(0)
+      } else {
+        const playtime = Math.floor((new Date().getTime() - startTime) / 1000)
+        setPlaytime(playtime)
+      }
+    }, 200)
+    return () => clearInterval(intervalId)
+  })
 
   const reveal = (coordinates: PatchCoordinate) => {
     if (firstReveal) {
@@ -31,6 +48,7 @@ export default function App() {
         coordinates
       )
       setField(initialField)
+      setStartTime(new Date().getTime())
     } else {
       let newField = revealPatch(field, coordinates)
 
@@ -63,6 +81,7 @@ export default function App() {
     setFirstReveal(true)
     setField(emptyField(fieldSize))
     setGameState(GameState.Playing)
+    setStartTime(0)
   }
 
   const overlay = (() => {
@@ -75,15 +94,18 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container} onLayout={onLayout}>
-      <GameFieldView
-        gameField={field}
-        reveal={reveal}
-        flag={flag}
-        maxSize={viewSize}
-        gameState={gameState}
-        remainingFlagCount={remainingFlagCount}
-      />
-      {overlay}
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <GameStatBar flagsRemaining={remainingFlagCount} playtime={playtime} />
+        <GameFieldView
+          gameField={field}
+          reveal={reveal}
+          flag={flag}
+          maxSize={viewSize}
+          gameState={gameState}
+          remainingFlagCount={remainingFlagCount}
+        />
+        {overlay}
+      </View>
     </SafeAreaView>
   )
 }
