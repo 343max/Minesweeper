@@ -1,0 +1,13 @@
+{
+  "name": "Minesweeper",
+  "displayName": "Minesweeper",
+  "expo": {
+    "name": "Minesweeper",
+    "slug": "Minesweeper",
+    "privacy": "unlisted",
+    "sdkVersion": "36.0.0",
+    "version": "1.0.0",
+    "entryPoint": "Icon/IconEntry.js",
+    "platforms": ["ios", "android", "web"]
+  }
+}
