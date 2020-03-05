@@ -39,23 +39,27 @@ export default function GameOverOverlay({
       : { text: "😫 Bummer! You lost 😭", buttonTitle: "Retry" }
 
   return (
-    <Animated.View
-      style={[
-        styles.box,
-        {
-          opacity: fadeAnimation,
-          transform: [{ translateY: slideInAnimation }]
-        }
-      ]}
-    >
-      <Text style={{ fontSize: 28, fontWeight: "bold" }}>{messages.text}</Text>
-      <TouchableOpacity style={styles.button} onPress={restart}>
-        <MaterialCommunityIcons name="reload" size={28} />
-        <Text style={{ fontSize: 28, fontWeight: "bold", marginLeft: 7 }}>
-          {messages.buttonTitle}
+    <View style={styles.container}>
+      <Animated.View
+        style={[
+          styles.dialog,
+          {
+            opacity: fadeAnimation,
+            transform: [{ translateY: slideInAnimation }]
+          }
+        ]}
+      >
+        <Text style={{ fontSize: 28, fontWeight: "bold" }}>
+          {messages.text}
         </Text>
-      </TouchableOpacity>
-    </Animated.View>
+        <TouchableOpacity style={styles.button} onPress={restart}>
+          <MaterialCommunityIcons name="reload" size={28} />
+          <Text style={{ fontSize: 28, fontWeight: "bold", marginLeft: 7 }}>
+            {messages.buttonTitle}
+          </Text>
+        </TouchableOpacity>
+      </Animated.View>
+    </View>
   )
 }
 
@@ -64,8 +68,14 @@ function rgba(red: number, green: number, blue: number, alpha: number): string {
 }
 
 const styles = StyleSheet.create({
-  box: {
+  container: {
     position: "absolute",
+    alignItems: "center",
+    right: 0,
+    left: 0,
+    paddingBottom: 60
+  },
+  dialog: {
     backgroundColor: rgba(255, 255, 255, 0.8),
     padding: 20,
     borderRadius: 20,
