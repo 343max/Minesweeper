@@ -9,6 +9,7 @@ import {
   GameState
 } from "../model/PlayingField"
 import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
+import FlagPatchView from "./FlagPatchView"
 
 interface PatchViewContentProps {
   patch: VisiblePatch
@@ -36,6 +37,7 @@ export default function PatchView({
   const revealable = patch != VisiblePatch.Flag
   return (
     <TouchableOpacity
+      activeOpacity={0.8}
       disabled={disabled}
       onPress={() => {
         if (revealable) {
@@ -101,13 +103,10 @@ function PatchViewContent({
       )
     case VisiblePatch.Flag:
       return (
-        <View style={[sizeStyle, style.box, alternatingStyle.grass]}>
-          <MaterialCommunityIcons
-            name="flag"
-            color="#f03507"
-            size={Math.round(sideLength * 0.5)}
-          />
-        </View>
+        <FlagPatchView
+          style={[sizeStyle, style.box, alternatingStyle.grass]}
+          sideLength={sideLength}
+        />
       )
     case VisiblePatch.AdjacentMine1:
     case VisiblePatch.AdjacentMine2:

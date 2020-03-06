@@ -41,12 +41,10 @@ export default function GameOverOverlay({
   return (
     <View style={styles.container}>
       <Animated.View
-        style={[
-          {
-            opacity: fadeAnimation,
-            transform: [{ translateY: slideInAnimation }]
-          }
-        ]}
+        style={{
+          opacity: fadeAnimation,
+          transform: [{ translateY: slideInAnimation }]
+        }}
       >
         <BlurView blurType="extraDark" style={styles.dialog}>
           <Text style={{ fontSize: 28, fontWeight: "bold", color: "#fff" }}>
