@@ -51,7 +51,9 @@ export default function GameOverOverlay({
             {messages.text}
           </Text>
           <TouchableOpacity style={styles.button} onPress={restart}>
-            <MaterialCommunityIcons name="reload" size={28} color="#fff" />
+            <View style={{ paddingTop: 2 }}>
+              <MaterialCommunityIcons name="reload" size={28} color="#fff" />
+            </View>
             <Text
               style={{
                 fontSize: 28,
