@@ -1,4 +1,6 @@
 {
+  "name": "minesweeper",
+  "displayName": "Minesweeper",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
