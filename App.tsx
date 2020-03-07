@@ -13,8 +13,9 @@ import {
 } from "./src/model/PlayingField"
 import { revealMines, revealPatch } from "./src/model/Reveal"
 import GameStatBar from "./src/components/GameStatBar"
+import CodePush from "react-native-code-push"
 
-export default function App() {
+function AppComponent() {
   const fieldSize: FieldSize = { width: 8, height: 10 }
   const mineCount = 10
 
@@ -109,6 +110,12 @@ export default function App() {
     </SafeAreaView>
   )
 }
+
+const App = CodePush({
+  checkFrequency: CodePush.CheckFrequency.ON_APP_START,
+  installMode: CodePush.InstallMode.IMMEDIATE
+})(AppComponent)
+export default App
 
 const styles = StyleSheet.create({
   container: {
