@@ -20,7 +20,7 @@ export enum VisiblePatch {
   AdjacentMine5,
   AdjacentMine6,
   AdjacentMine7,
-  AdjacentMine8
+  AdjacentMine8,
 }
 
 export type VisibleField = VisiblePatch[][]
@@ -48,7 +48,7 @@ export function getAdjacentPatches(
     { x: x + 0, y: y + 1 },
     { x: x + 1, y: y - 1 },
     { x: x + 1, y: y + 0 },
-    { x: x + 1, y: y + 1 }
+    { x: x + 1, y: y + 1 },
   ].filter(({ x, y }) => {
     return x >= 0 && y >= 0 && x < width && y < height
   })
@@ -86,7 +86,7 @@ export function getVisiblePatchForMineCount(mineCount: number): VisiblePatch {
     VisiblePatch.AdjacentMine5,
     VisiblePatch.AdjacentMine6,
     VisiblePatch.AdjacentMine7,
-    VisiblePatch.AdjacentMine8
+    VisiblePatch.AdjacentMine8,
   ][mineCount]
 }
 
@@ -137,7 +137,7 @@ export function emptyField({ width, height }: FieldSize): FieldState {
       return {
         isMine: false,
         isFlagged: false,
-        isRevealed: false
+        isRevealed: false,
       }
     })
   })
@@ -173,7 +173,7 @@ export function generateMinefield(
 export enum GameState {
   Playing = "Playing",
   Lost = "Lost",
-  Won = "Won"
+  Won = "Won",
 }
 
 function getFlattenedField(field: FieldState): Patch[] {
@@ -202,13 +202,8 @@ export function getGameState(field: FieldState): GameState {
   }
 }
 
-export function getRemainingFlags(field: FieldState): number {
-  const flatField = getFlattenedField(field)
-  const mineCount = flatField.reduce((count, patch) => {
-    return count + (patch.isMine ? 1 : 0)
-  }, 0)
-  const flagCount = flatField.reduce((count, patch) => {
+export function getFlagCount(field: FieldState): number {
+  return getFlattenedField(field).reduce((count, patch) => {
     return count + (patch.isFlagged ? 1 : 0)
   }, 0)
-  return mineCount - flagCount
 }

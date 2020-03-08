@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { LayoutChangeEvent, SafeAreaView, StyleSheet, View } from "react-native"
+import CodePush from "react-native-code-push"
 import GameFieldView, { Size } from "./src/components/GameFieldView"
 import GameOverOverlay from "./src/components/GameOverOverlay"
+import GameStatBar from "./src/components/GameStatBar"
 import {
   emptyField,
   FieldSize,
   GameState,
   generateMinefield,
+  getFlagCount,
   getGameState,
   PatchCoordinate,
-  getRemainingFlags,
 } from "./src/model/PlayingField"
 import { revealMines, revealPatch } from "./src/model/Reveal"
-import GameStatBar from "./src/components/GameStatBar"
-import CodePush from "react-native-code-push"
 
 function AppComponent() {
   const fieldSize: FieldSize = { width: 8, height: 10 }
@@ -25,7 +25,7 @@ function AppComponent() {
   const [startTime, setStartTime] = useState(0)
   const [playtime, setPlaytime] = useState(0)
 
-  const remainingFlagCount = firstReveal ? mineCount : getRemainingFlags(field)
+  const remainingFlagCount = mineCount - getFlagCount(field)
 
   useEffect(() => {
     const intervalId = setInterval(() => {

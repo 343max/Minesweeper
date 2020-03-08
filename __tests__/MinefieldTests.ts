@@ -1,29 +1,27 @@
 import {
   emptyField,
   FieldState,
+  GameState,
   generateMinefield,
   getAdjacentMineCount,
+  getAdjacentMineCountFromVisiblePatch,
   getAdjacentPatches,
   getFieldSize,
+  getFlagCount,
+  getGameState,
   getVisibleField,
   getVisiblePatch,
   getVisiblePatchForMineCount,
+  Patch,
   VisibleField,
   VisiblePatch,
-  BoolField,
-  Patch,
-  FieldSize,
-  getGameState,
-  GameState,
-  getAdjacentMineCountFromVisiblePatch,
-  getRemainingFlags
 } from "../src/model/PlayingField"
 
 function f(isMine: number, isFlagged: number, isRevealed: number): Patch {
   return {
     isMine: isMine == 1,
     isFlagged: isFlagged == 1,
-    isRevealed: isRevealed == 1
+    isRevealed: isRevealed == 1,
   }
 }
 
@@ -32,7 +30,7 @@ test("should generate a patch", () => {
   expect(f(0, 1, 1)).toStrictEqual({
     isMine: false,
     isFlagged: true,
-    isRevealed: true
+    isRevealed: true,
   })
 })
 
@@ -40,7 +38,7 @@ test("should generate an empty filed", () => {
   const field = emptyField({ width: 2, height: 3 })
   const expectedField: FieldState = [
     [f(0, 0, 0), f(0, 0, 0), f(0, 0, 0)],
-    [f(0, 0, 0), f(0, 0, 0), f(0, 0, 0)]
+    [f(0, 0, 0), f(0, 0, 0), f(0, 0, 0)],
   ]
 
   expect(field).toStrictEqual(expectedField)
@@ -75,7 +73,7 @@ test("should have 8 adjacent patches", () => {
     { x: 1, y: 2 },
     { x: 2, y: 0 },
     { x: 2, y: 1 },
-    { x: 2, y: 2 }
+    { x: 2, y: 2 },
   ])
 })
 
@@ -84,7 +82,7 @@ test("should get the correct adjecant patches", () => {
   expect(patches).toEqual([
     { x: 0, y: 0 },
     { x: 0, y: 1 },
-    { x: 1, y: 0 }
+    { x: 1, y: 0 },
   ])
 })
 
@@ -104,7 +102,7 @@ test("should check nearby to be empty", () => {
     [
       [f(0, 0, 0), f(0, 0, 0), f(0, 0, 0)],
       [f(0, 0, 0), f(0, 0, 0), f(0, 0, 0)],
-      [f(0, 0, 0), f(0, 0, 0), f(0, 0, 0)]
+      [f(0, 0, 0), f(0, 0, 0), f(0, 0, 0)],
     ],
     { x: 1, y: 1 }
   )
@@ -116,7 +114,7 @@ test("should check nearby for mines", () => {
     [
       [f(1, 0, 0), f(1, 0, 0), f(1, 0, 0)],
       [f(1, 0, 0), f(0, 0, 0), f(1, 0, 0)],
-      [f(1, 0, 0), f(1, 0, 0), f(1, 0, 0)]
+      [f(1, 0, 0), f(1, 0, 0), f(1, 0, 0)],
     ],
     { x: 1, y: 1 }
   )
@@ -126,7 +124,7 @@ test("should check nearby for mines", () => {
 test("should check nearby patches for mines correctly", () => {
   const field: FieldState = [
     [f(1, 1, 0), f(1, 0, 0)],
-    [f(0, 0, 1), f(0, 0, 1)]
+    [f(0, 0, 1), f(0, 0, 1)],
   ]
 
   expect(getAdjacentMineCount(field, { x: 1, y: 1 })).toBe(2)
@@ -216,13 +214,13 @@ test("should show grass for empty un-revealed", () => {
 test("should generate a visible field", () => {
   const field: FieldState = [
     [f(1, 1, 0), f(1, 0, 0)],
-    [f(0, 0, 1), f(0, 0, 1)]
+    [f(0, 0, 1), f(0, 0, 1)],
   ]
 
   const visibleField = getVisibleField(field)
   const expectedVisibleField: VisibleField = [
     [VisiblePatch.Flag, VisiblePatch.Grass],
-    [VisiblePatch.AdjacentMine2, VisiblePatch.AdjacentMine2]
+    [VisiblePatch.AdjacentMine2, VisiblePatch.AdjacentMine2],
   ]
 
   expect(visibleField).toStrictEqual(expectedVisibleField)
@@ -246,10 +244,10 @@ test("should return GameState.GameWon when there are no more unrevealed patches 
   expect(state).toBe(GameState.Won)
 })
 
-test("should return the correct remaining flags count", () => {
-  const field = [[f(1, 1, 0), f(1, 0, 0), f(0, 0, 0)]]
-  const remainingFlags = getRemainingFlags(field)
-  expect(remainingFlags).toBe(1)
+test("should return the correct flags count", () => {
+  const field = [[f(1, 1, 0), f(1, 0, 0), f(0, 1, 0)]]
+  const flagCount = getFlagCount(field)
+  expect(flagCount).toBe(2)
 })
 
 test("should return the correct mine count", () => {
