@@ -9,7 +9,7 @@ import {
   generateMinefield,
   getGameState,
   PatchCoordinate,
-  getRemainingFlags
+  getRemainingFlags,
 } from "./src/model/PlayingField"
 import { revealMines, revealPatch } from "./src/model/Reveal"
 import GameStatBar from "./src/components/GameStatBar"
@@ -65,8 +65,12 @@ function AppComponent() {
   }
 
   const flag = ({ x, y }: PatchCoordinate) => {
-    if (!field[x][y].isRevealed && remainingFlagCount > 0) {
-      field[x][y].isFlagged = !field[x][y].isFlagged
+    if (!field[x][y].isRevealed) {
+      if (field[x][y].isFlagged) {
+        field[x][y].isFlagged = false
+      } else if (remainingFlagCount > 0) {
+        field[x][y].isFlagged = true
+      }
       setField([...field])
     }
   }
@@ -113,7 +117,7 @@ function AppComponent() {
 
 const App = CodePush({
   checkFrequency: CodePush.CheckFrequency.ON_APP_START,
-  installMode: CodePush.InstallMode.IMMEDIATE
+  installMode: CodePush.InstallMode.IMMEDIATE,
 })(AppComponent)
 export default App
 
@@ -122,6 +126,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#000",
     alignItems: "center",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 })
