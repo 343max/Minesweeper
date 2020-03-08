@@ -5,10 +5,10 @@ import GameFieldView, { Size } from "./src/components/GameFieldView"
 import GameOverOverlay from "./src/components/GameOverOverlay"
 import GameStatBar from "./src/components/GameStatBar"
 import {
-  emptyField,
+  createEmptyField,
   FieldSize,
   GameState,
-  generateMinefield,
+  addMinesToField,
   getFlagCount,
   getGameState,
   PatchCoordinate,
@@ -20,7 +20,7 @@ function AppComponent() {
   const mineCount = 10
 
   const [gameState, setGameState] = useState(GameState.Playing)
-  const [field, setField] = useState(emptyField(fieldSize))
+  const [field, setField] = useState(createEmptyField(fieldSize))
   const [firstReveal, setFirstReveal] = useState(true)
   const [startTime, setStartTime] = useState(0)
   const [playtime, setPlaytime] = useState(0)
@@ -45,7 +45,7 @@ function AppComponent() {
     if (firstReveal) {
       setFirstReveal(false)
       const initialField = revealPatch(
-        generateMinefield(fieldSize, mineCount, coordinates),
+        addMinesToField(field, mineCount, coordinates),
         coordinates
       )
       setField(initialField)
@@ -84,7 +84,7 @@ function AppComponent() {
 
   const restartGame = () => {
     setFirstReveal(true)
-    setField(emptyField(fieldSize))
+    setField(createEmptyField(fieldSize))
     setGameState(GameState.Playing)
     setStartTime(0)
   }

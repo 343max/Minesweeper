@@ -131,7 +131,7 @@ export function getVisibleField(field: FieldState): VisibleField {
   })
 }
 
-export function emptyField({ width, height }: FieldSize): FieldState {
+export function createEmptyField({ width, height }: FieldSize): FieldState {
   return filledArray(width, () => {
     return filledArray(height, () => {
       return {
@@ -143,8 +143,8 @@ export function emptyField({ width, height }: FieldSize): FieldState {
   })
 }
 
-export function generateMinefield(
-  { width, height }: FieldSize,
+export function addMinesToField(
+  field: FieldState,
   mineCount: number,
   safePatch: PatchCoordinate
 ): FieldState {
@@ -152,7 +152,7 @@ export function generateMinefield(
     return Math.floor(Math.random() * Math.floor(max))
   }
 
-  let field = emptyField({ width, height })
+  const { width, height } = getFieldSize(field)
 
   let currentCount = 0
   while (currentCount < mineCount) {

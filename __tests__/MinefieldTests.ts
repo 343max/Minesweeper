@@ -1,8 +1,8 @@
 import {
-  emptyField,
+  createEmptyField,
   FieldState,
   GameState,
-  generateMinefield,
+  addMinesToField,
   getAdjacentMineCount,
   getAdjacentMineCountFromVisiblePatch,
   getAdjacentPatches,
@@ -35,7 +35,7 @@ test("should generate a patch", () => {
 })
 
 test("should generate an empty filed", () => {
-  const field = emptyField({ width: 2, height: 3 })
+  const field = createEmptyField({ width: 2, height: 3 })
   const expectedField: FieldState = [
     [f(0, 0, 0), f(0, 0, 0), f(0, 0, 0)],
     [f(0, 0, 0), f(0, 0, 0), f(0, 0, 0)],
@@ -45,7 +45,13 @@ test("should generate an empty filed", () => {
 })
 
 test("should generate a minefield", () => {
-  const field = generateMinefield({ width: 2, height: 3 }, 5, { x: 1, y: 2 })
+  let emptyField = createEmptyField({ width: 2, height: 3 })
+  emptyField[1][1].isFlagged = true
+
+  const field = addMinesToField(emptyField, 5, {
+    x: 1,
+    y: 2,
+  })
 
   const mineCount = field.reduce((count, row) => {
     return row.reduce((count, patch) => {
@@ -55,6 +61,8 @@ test("should generate a minefield", () => {
   expect(mineCount).toBe(5)
 
   expect(field[1][2]).toStrictEqual(f(0, 0, 0))
+  expect(field[1][1].isFlagged).toBe(true)
+  expect(getFlagCount(field)).toBe(1)
 })
 
 test("should have no adjacent patches", () => {
@@ -87,7 +95,7 @@ test("should get the correct adjecant patches", () => {
 })
 
 test("should messure a generated field size correctly", () => {
-  const field = generateMinefield({ width: 5, height: 3 }, 0, { x: 0, y: 0 })
+  const field = createEmptyField({ width: 5, height: 3 })
   const size = getFieldSize(field)
   expect(size).toEqual({ width: 5, height: 3 })
 })
