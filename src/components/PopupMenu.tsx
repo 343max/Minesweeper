@@ -8,12 +8,14 @@ export interface PopupMenuItem {
   label: string
 }
 
+type PopupMenuDidSelectCallback = (item: PopupMenuItem) => void
+
 interface PopupMenuItemViewProps {
   item: PopupMenuItem
-  selected: boolean
+  didSelect: PopupMenuDidSelectCallback
 }
 
-function PopupMenuItemView({ item, selected }: PopupMenuItemViewProps) {
+function PopupMenuItemView({ item, didSelect }: PopupMenuItemViewProps) {
   const [isHighlighted, setHighlighted] = useState(false)
 
   return (
@@ -23,6 +25,7 @@ function PopupMenuItemView({ item, selected }: PopupMenuItemViewProps) {
       <TouchableWithoutFeedback
         onPressIn={() => setHighlighted(true)}
         onPressOut={() => setHighlighted(false)}
+        onPress={() => didSelect(item)}
       >
         <Text style={{ color: isHighlighted ? "#fff" : "#000" }}>
           {item.label}
@@ -35,6 +38,7 @@ function PopupMenuItemView({ item, selected }: PopupMenuItemViewProps) {
 export interface PopupMenuProps {
   items: PopupMenuItem[]
   selected: string
+  didSelect: PopupMenuDidSelectCallback
 }
 
 interface ExpandedPopupMenuViewProps extends PopupMenuProps {
@@ -49,6 +53,7 @@ function ExpandedPopupMenuView({
   collapse,
   isVisible,
   fromRect,
+  didSelect,
 }: ExpandedPopupMenuViewProps) {
   return (
     <Popover
@@ -69,6 +74,7 @@ function ExpandedPopupMenuView({
               item={item}
               selected={item.id == selected}
               key={item.id}
+              didSelect={didSelect}
             />
           )
         })}
@@ -77,7 +83,11 @@ function ExpandedPopupMenuView({
   )
 }
 
-export default function PopupMenu({ items, selected }: PopupMenuProps) {
+export default function PopupMenu({
+  items,
+  selected,
+  didSelect,
+}: PopupMenuProps) {
   const selectedIndex = items.findIndex(item => {
     return item.id == selected
   })
@@ -128,6 +138,10 @@ export default function PopupMenu({ items, selected }: PopupMenuProps) {
         collapse={() => setExpanded(false)}
         isVisible={isExpanded}
         fromRect={fromRect}
+        didSelect={item => {
+          setExpanded(false)
+          didSelect(item)
+        }}
       />
     </View>
   )

@@ -6,11 +6,15 @@ import PopupMenu, { PopupMenuItem } from "./PopupMenu"
 interface GameStatBarProps {
   flagsRemaining: number
   playtime: number
+  selectedLevel: string
+  didSelectLevel: (level: string) => void
 }
 
 export default function GameStatBar({
   flagsRemaining,
   playtime,
+  selectedLevel,
+  didSelectLevel,
 }: GameStatBarProps) {
   const menuItems: PopupMenuItem[] = [
     { id: "easy", label: "Easy" },
@@ -21,7 +25,11 @@ export default function GameStatBar({
   return (
     <View style={style.bar}>
       <View style={style.section}>
-        <PopupMenu items={menuItems} selected="easy" />
+        <PopupMenu
+          items={menuItems}
+          selected={selectedLevel}
+          didSelect={item => didSelectLevel(item.id)}
+        />
       </View>
       <View style={style.section}>
         <Entypo name="stopwatch" size={22} color="#fff" />

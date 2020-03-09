@@ -23,21 +23,19 @@ interface GameLevel {
 function AppComponent() {
   const levels: { [key: string]: GameLevel } = {
     easy: { fieldSize: { width: 8, height: 10 }, mineCount: 10 },
-    medium: { fieldSize: { width: 14, height: 18 }, mineCount: 40 },
-    hard: { fieldSize: { width: 20, height: 24 }, mineCount: 99 },
+    medium: { fieldSize: { width: 12, height: 21 }, mineCount: 40 },
+    hard: { fieldSize: { width: 16, height: 30 }, mineCount: 99 },
   }
 
   const [level, setLevel] = useState("easy")
-  const fieldSize = levels["easy"].fieldSize
-  const mineCount = levels["easy"].mineCount
 
   const [gameState, setGameState] = useState(GameState.Playing)
-  const [field, setField] = useState(createEmptyField(fieldSize))
+  const [field, setField] = useState(createEmptyField(levels[level].fieldSize))
   const [firstReveal, setFirstReveal] = useState(true)
   const [startTime, setStartTime] = useState(0)
   const [playtime, setPlaytime] = useState(0)
 
-  const remainingFlagCount = mineCount - getFlagCount(field)
+  const remainingFlagCount = levels[level].mineCount - getFlagCount(field)
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -57,7 +55,7 @@ function AppComponent() {
     if (firstReveal) {
       setFirstReveal(false)
       const initialField = revealPatch(
-        addMinesToField(field, mineCount, coordinates),
+        addMinesToField(field, levels[level].mineCount, coordinates),
         coordinates
       )
       setField(initialField)
@@ -94,16 +92,21 @@ function AppComponent() {
     setViewSize({ width, height })
   }
 
-  const restartGame = () => {
+  const restartGame = (level: string) => {
     setFirstReveal(true)
-    setField(createEmptyField(fieldSize))
+    setField(createEmptyField(levels[level].fieldSize))
     setGameState(GameState.Playing)
     setStartTime(0)
   }
 
   const overlay = (() => {
     if (gameState != GameState.Playing) {
-      return <GameOverOverlay restart={restartGame} gameState={gameState} />
+      return (
+        <GameOverOverlay
+          restart={() => restartGame(level)}
+          gameState={gameState}
+        />
+      )
     } else {
       return null
     }
@@ -112,7 +115,15 @@ function AppComponent() {
   return (
     <SafeAreaView style={styles.container} onLayout={onLayout}>
       <View style={{ flex: 1, justifyContent: "center" }}>
-        <GameStatBar flagsRemaining={remainingFlagCount} playtime={playtime} />
+        <GameStatBar
+          flagsRemaining={remainingFlagCount}
+          playtime={playtime}
+          selectedLevel={level}
+          didSelectLevel={level => {
+            setLevel(level)
+            restartGame(level)
+          }}
+        />
         <GameFieldView
           gameField={field}
           reveal={reveal}
