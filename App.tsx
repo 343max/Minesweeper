@@ -15,9 +15,21 @@ import {
 } from "./src/model/PlayingField"
 import { revealMines, revealPatch } from "./src/model/Reveal"
 
+interface GameLevel {
+  fieldSize: FieldSize
+  mineCount: number
+}
+
 function AppComponent() {
-  const fieldSize: FieldSize = { width: 8, height: 10 }
-  const mineCount = 10
+  const levels: { [key: string]: GameLevel } = {
+    easy: { fieldSize: { width: 8, height: 10 }, mineCount: 10 },
+    medium: { fieldSize: { width: 14, height: 18 }, mineCount: 40 },
+    hard: { fieldSize: { width: 20, height: 24 }, mineCount: 99 },
+  }
+
+  const [level, setLevel] = useState("easy")
+  const fieldSize = levels["easy"].fieldSize
+  const mineCount = levels["easy"].mineCount
 
   const [gameState, setGameState] = useState(GameState.Playing)
   const [field, setField] = useState(createEmptyField(fieldSize))
