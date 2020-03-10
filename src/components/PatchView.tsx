@@ -1,14 +1,12 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons"
-import React from "react"
+import React, { useMemo } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 import {
+  GameState,
+  getAdjacentMineCountFromVisiblePatch,
   PatchCoordinate,
   VisiblePatch,
-  Patch,
-  getAdjacentMineCountFromVisiblePatch,
-  GameState
 } from "../model/PlayingField"
-import { CallbackWithCoordinates } from "../model/CallbackWithCoordinates"
 import FlagPatchView from "./FlagPatchView"
 
 interface PatchViewContentProps {
@@ -23,44 +21,40 @@ interface PatchViewProps extends PatchViewContentProps {
   gameState: GameState
 }
 
-export default function PatchView({
-  patch,
-  coordinates,
-  reveal,
-  flag,
-  sideLength,
-  gameState
-}: PatchViewProps) {
-  const disabled =
-    (patch != VisiblePatch.Grass && patch != VisiblePatch.Flag) ||
-    gameState != GameState.Playing
-  const revealable = patch != VisiblePatch.Flag
-  return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      disabled={disabled}
-      onPress={() => {
-        if (revealable) {
-          reveal(coordinates)
-        }
-      }}
-      onLongPress={() => {
-        flag(coordinates)
-      }}
-    >
-      <PatchViewContent
-        patch={patch}
-        coordinates={coordinates}
-        sideLength={sideLength}
-      />
-    </TouchableOpacity>
-  )
+export default function PatchView(props: PatchViewProps) {
+  return useMemo(() => {
+    const { patch, coordinates, reveal, flag, sideLength, gameState } = props
+    const disabled =
+      (patch != VisiblePatch.Grass && patch != VisiblePatch.Flag) ||
+      gameState != GameState.Playing
+    const revealable = patch != VisiblePatch.Flag
+    return (
+      <TouchableOpacity
+        activeOpacity={0.8}
+        disabled={disabled}
+        onPress={() => {
+          if (revealable) {
+            reveal(coordinates)
+          }
+        }}
+        onLongPress={() => {
+          flag(coordinates)
+        }}
+      >
+        <PatchViewContent
+          patch={patch}
+          coordinates={coordinates}
+          sideLength={sideLength}
+        />
+      </TouchableOpacity>
+    )
+  }, [props])
 }
 
 function PatchViewContent({
   patch,
   coordinates,
-  sideLength
+  sideLength,
 }: PatchViewContentProps) {
   const sizeStyle = { width: sideLength, height: sideLength }
   const position = coordinates.x + coordinates.y
@@ -79,7 +73,7 @@ function PatchViewContent({
         "#b648f2",
         "#f4840d",
         "#4885ed",
-        "#f4c20d"
+        "#f4c20d",
       ]
       const diameter = Math.round((sideLength * 0.4) / 2) * 2
       return (
@@ -87,7 +81,7 @@ function PatchViewContent({
           style={[
             sizeStyle,
             style.box,
-            { backgroundColor: colors[position % colors.length] }
+            { backgroundColor: colors[position % colors.length] },
           ]}
         >
           <View
@@ -96,7 +90,7 @@ function PatchViewContent({
               height: diameter,
               backgroundColor: "#000",
               opacity: 0.4,
-              borderRadius: diameter / 2
+              borderRadius: diameter / 2,
             }}
           />
         </View>
@@ -125,7 +119,7 @@ function PatchViewContent({
         "#fd9006",
         "#0897a7",
         "#0897a7",
-        "#0897a7"
+        "#0897a7",
       ]
       return (
         <View style={[sizeStyle, style.box, alternatingStyle.empty]}>
@@ -133,7 +127,7 @@ function PatchViewContent({
             style={{
               color: color[mineCount - 1],
               fontWeight: "700",
-              fontSize: sideLength * 0.5
+              fontSize: sideLength * 0.5,
             }}
           >{`${mineCount}`}</Text>
         </View>
@@ -144,24 +138,24 @@ function PatchViewContent({
 const style = StyleSheet.create({
   box: {
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 })
 
 const oddStyle = StyleSheet.create({
   grass: {
-    backgroundColor: "#aad751"
+    backgroundColor: "#aad751",
   },
   empty: {
-    backgroundColor: "#d7b899"
-  }
+    backgroundColor: "#d7b899",
+  },
 })
 
 const evenStyle = StyleSheet.create({
   grass: {
-    backgroundColor: "#a2d149"
+    backgroundColor: "#a2d149",
   },
   empty: {
-    backgroundColor: "#e5c29f"
-  }
+    backgroundColor: "#e5c29f",
+  },
 })
