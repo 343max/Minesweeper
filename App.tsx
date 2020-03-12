@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics"
 import React, { useEffect, useState } from "react"
 import { LayoutChangeEvent, SafeAreaView, StyleSheet, View } from "react-native"
 import CodePush from "react-native-code-push"
@@ -5,10 +6,10 @@ import GameFieldView, { Size } from "./src/components/GameFieldView"
 import GameOverOverlay from "./src/components/GameOverOverlay"
 import GameStatBar from "./src/components/GameStatBar"
 import {
+  addMinesToField,
   createEmptyField,
   FieldSize,
   GameState,
-  addMinesToField,
   getFlagCount,
   getGameState,
   PatchCoordinate,
@@ -68,6 +69,12 @@ function AppComponent() {
 
       if (gameState != GameState.Playing) {
         newField = revealMines(newField)
+
+        if (gameState == GameState.Won) {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+        } else {
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+        }
       }
 
       setField([...newField])
@@ -78,8 +85,10 @@ function AppComponent() {
     if (!field[x][y].isRevealed) {
       if (field[x][y].isFlagged) {
         field[x][y].isFlagged = false
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
       } else if (remainingFlagCount > 0) {
         field[x][y].isFlagged = true
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
       }
       setField([...field])
     }

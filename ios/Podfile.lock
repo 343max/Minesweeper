@@ -19,6 +19,8 @@ PODS:
   - EXFont (8.0.0):
     - UMCore
     - UMFontInterface
+  - EXHaptics (8.0.0):
+    - UMCore
   - EXKeepAwake (8.0.0):
     - UMCore
   - EXLinearGradient (8.0.0):
@@ -287,6 +289,7 @@ DEPENDENCIES:
   - EXErrorRecovery (from `../node_modules/expo-error-recovery/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
+  - EXHaptics (from `../node_modules/expo-haptics/ios`)
   - EXKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - EXLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - EXLocation (from `../node_modules/expo-location/ios`)
@@ -365,6 +368,9 @@ EXTERNAL SOURCES:
   EXFont:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-font/ios"
+  EXHaptics:
+    :path: !ruby/object:Pathname
+    path: "../node_modules/expo-haptics/ios"
   EXKeepAwake:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-keep-awake/ios"
@@ -486,6 +492,7 @@ SPEC CHECKSUMS:
   EXErrorRecovery: d36db99ec6a3808f313f01b0890eb443796dd1c2
   EXFileSystem: 6e0d9bb6cc4ea404dbb8f583c1a8a2dcdf4b83b6
   EXFont: 6187b5ab46ee578d5f8e7f2ea092752e78772235
+  EXHaptics: 24438d930bd1fbef68e9eec47facea5dc2dab8a9
   EXKeepAwake: 66e9f80b6d129633725a0e42f8d285c229876811
   EXLinearGradient: 75f302f9d6484267a3f6d3252df2e7a5f00e716a
   EXLocation: 3c75d012ca92eed94d4338778d79c49d1252393a
