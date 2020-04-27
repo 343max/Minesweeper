@@ -1,0 +1,56 @@
+---
+format_version: "8"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: react-native
+workflows:
+    build:
+        steps:
+            - cache-pull@2.1.x: {}
+            - script@1.1.6:
+                  inputs:
+                      - content: |-
+                            #!/usr/bin/env bash
+                            # fail if any command fails
+                            set -e
+                            # debug log
+                            set -x
+
+                            yarn
+            - script@1.1.6:
+                  inputs:
+                      - content: |-
+                            #!/usr/bin/env bash
+                            # fail if any command fails
+                            set -e
+                            # debug log
+                            set -x
+
+                            pod install --project-directory=ios
+            - ios-auto-provision@1.5.x:
+                  inputs:
+                      - team_id: "$DB_TEAM_ID"
+                      - distribution_type: app-store
+                      - generate_profiles: "yes"
+                      - configuration: Release
+                      - ProjectPath: ios/Minesweeper.xcworkspace
+            - xcode-archive@2.8.0:
+                  inputs:
+                      - project_path: ios/Minesweeper.xcworkspace
+                      - export_method: app-store
+                      - team_id: "$DB_TEAM_ID"
+                      - configuration: Release
+                      - scheme: Minesweeper
+        # - deploy-to-itunesconnect-application-loader@0.10.1:
+        #     inputs:
+        #     - app_password: "$APPLE_ID_APP_SPECIFIC_PASSWORD"
+        #     - itunescon_user: "$APPLE_ID"
+        # - script-runner@0.9.3:
+        #     inputs:
+        #     - file_path: "./scripts/sentry-commit-info.sh"
+        # - cache-push@2.2.x:
+        #     inputs:
+        #     - cache_paths: |-
+        #         $BITRISE_CACHE_DIR
+        #         ./node_modules -> ./package-lock.json
+        #         /Users/vagrant/.npm -> ./package-lock.json
+        #         /Users/vagrant/Library/Detox/ios/ -> ./package-lock.json
