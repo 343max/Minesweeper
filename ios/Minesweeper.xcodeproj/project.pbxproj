@@ -297,8 +297,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Minesweeper/Minesweeper.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Distribution: Max von Webel (ATMW4AU45H)";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = ATMW4AU45H;
 				INFOPLIST_FILE = Minesweeper/Info.plist;
@@ -311,7 +311,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.343max.minesweeper;
 				PRODUCT_NAME = Minesweeper;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = Minesweeper_de.343max.minesweeper;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
