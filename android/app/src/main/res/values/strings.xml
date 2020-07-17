@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Minesweeper</string>
+  <string name="app_name">Minesweeper</string>
+  <string moduleConfig="true" name="CodePushDeploymentKey">GfZ-X5MBxRx5NOCwF95szRpEFRdc6BDWvQ8t6</string>
 </resources>
