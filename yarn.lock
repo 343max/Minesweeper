@@ -6928,6 +6928,10 @@ react-native-popover-view@^2.0.7:
   dependencies:
     react-native-safe-area-view "^0.14.6"
 
+react-native-previewing@343max/react-native-previewing:
+  version "0.1.0"
+  resolved "https://codeload.github.com/343max/react-native-previewing/tar.gz/0bd4a29f55ea5640597d3c27528306daec06e660"
+
 react-native-reanimated@~1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.7.1.tgz#6363c7f3ebbabc56a05d5dccaf09d95f3b6a2d69"

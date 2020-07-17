@@ -1,24 +1,23 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { BlurView } from "@react-native-community/blur"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, FC } from "react"
 import {
   Animated,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Alert,
 } from "react-native"
 import { GameState } from "../model/PlayingField"
+import type { PreviewProvider } from "react-native-previewing"
 
 interface GameOverlayProps {
   restart: () => void
   gameState: GameState
 }
 
-export default function GameOverOverlay({
-  restart,
-  gameState
-}: GameOverlayProps) {
+const GameOverOverlay: FC<GameOverlayProps> = ({ restart, gameState }) => {
   const [fadeAnimation] = useState(new Animated.Value(0))
   const [slideInAnimation] = useState(new Animated.Value(-150))
 
@@ -27,9 +26,9 @@ export default function GameOverOverlay({
       Animated.timing(fadeAnimation, {
         toValue: 1,
         duration: 200,
-        useNativeDriver: true
+        useNativeDriver: true,
       }),
-      Animated.spring(slideInAnimation, { toValue: 0, useNativeDriver: true })
+      Animated.spring(slideInAnimation, { toValue: 0, useNativeDriver: true }),
     ]).start()
   })
 
@@ -43,7 +42,7 @@ export default function GameOverOverlay({
       <Animated.View
         style={{
           opacity: fadeAnimation,
-          transform: [{ translateY: slideInAnimation }]
+          transform: [{ translateY: slideInAnimation }],
         }}
       >
         <BlurView blurType="extraDark" style={styles.dialog}>
@@ -59,7 +58,7 @@ export default function GameOverOverlay({
                 fontSize: 28,
                 fontWeight: "bold",
                 marginLeft: 7,
-                color: "#fff"
+                color: "#fff",
               }}
             >
               {messages.buttonTitle}
@@ -71,6 +70,8 @@ export default function GameOverOverlay({
   )
 }
 
+export default GameOverOverlay
+
 function rgba(red: number, green: number, blue: number, alpha: number): string {
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`
 }
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     right: 0,
     left: 0,
-    paddingBottom: 60
+    paddingBottom: 60,
   },
   dialog: {
     padding: 20,
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 10,
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   button: {
     flex: 1,
@@ -100,6 +101,21 @@ const styles = StyleSheet.create({
     marginTop: 15,
     padding: 14,
     backgroundColor: rgba(0, 180, 0, 0.6),
-    borderRadius: 20
-  }
+    borderRadius: 20,
+  },
 })
+
+export const GameOverOverlayPreview: PreviewProvider = () => [
+  <View style={{ height: 300 }}>
+    <GameOverOverlay
+      restart={() => Alert.alert("restart")}
+      gameState={GameState.Won}
+    />
+  </View>,
+  <View style={{ height: 300 }}>
+    <GameOverOverlay
+      restart={() => Alert.alert("restart")}
+      gameState={GameState.Lost}
+    />
+  </View>,
+]
