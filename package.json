@@ -7,7 +7,8 @@
     "web": "expo start --web",
     "start": "react-native start",
     "test": "jest",
-    "pod-install": "cd ios; pod install"
+    "pod-install": "cd ios; pod install",
+    "deploy-ios-testflight": "cd ios; fastlane testflight"
   },
   "dependencies": {
     "@react-native-community/blur": "^3.4.1",
