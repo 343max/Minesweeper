@@ -23,7 +23,7 @@
     "react-native-code-push": "^6.1.1",
     "react-native-gesture-handler": "~1.6.1",
     "react-native-popover-view": "^2.0.7",
-    "react-native-reanimated": "~1.7.1",
+    "react-native-reanimated": "~2.10.0",
     "react-native-screens": "2.4.0",
     "react-native-unimodules": "~0.8.1",
     "react-native-web": "~0.12.2"
